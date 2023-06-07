@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Widget for the root/initial pages in the bottom navigation bar.
-class RootScreen extends StatelessWidget {
+class PromptPage extends StatelessWidget {
   /// Creates a RootScreen
-  const RootScreen({
+  const PromptPage({
     required this.label,
     required this.detailsPath,
     this.secondDetailsPath,

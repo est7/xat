@@ -1,14 +1,10 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:xat/page/chat/chat_detail_page.dart';
-import 'package:xat/page/chat/chat_page.dart';
-import 'package:xat/page/prompt/prompt_detail_page.dart';
 import 'package:xat/page/settings/azure_setting_page.dart';
 import 'package:xat/page/settings/chat_setting_page.dart';
 import 'package:xat/page/settings/settings_page.dart';
 import 'package:xat/widgets/scaffold_with_nav_bar.dart';
-
-import 'page/root_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -18,7 +14,7 @@ final GlobalKey<NavigatorState> _sectionANavigatorKey =
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/chat',
+  initialLocation: '/a',
   routes: <RouteBase>[
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,
@@ -33,16 +29,16 @@ final GoRouter router = GoRouter(
           routes: <RouteBase>[
             GoRoute(
               //在底部导航栏的第一个标签中作为根显示的屏幕。
-              path: '/chat',
+              path: '/a',
               builder: (BuildContext context, GoRouterState state) =>
-                  const ChatPage(label: 'chat', detailsPath: '/chat/detail'),
+                  const RootScreen(label: 'A', detailsPath: '/a/details'),
               routes: <RouteBase>[
                 //显示在第一个标签的导航器上的细节屏幕堆叠。
                 // 这将覆盖屏幕A，但不包括应用程序外壳(application shell)（底部导航栏）。
                 GoRoute(
-                  path: 'detail',
+                  path: 'details',
                   builder: (BuildContext context, GoRouterState state) =>
-                      const ChatDetailPage(label: 'chat_detail'),
+                      const DetailsScreen(label: 'A'),
                 ),
               ],
             ),
@@ -53,18 +49,19 @@ final GoRouter router = GoRouter(
           //如果其他地方不需要navigatorKey，就没有必要提供它。如果没有提供，将使用一个默认的键。
           routes: <RouteBase>[
             GoRoute(
-              path: '/prompt',
+              path: '/b',
               builder: (BuildContext context, GoRouterState state) =>
                   const RootScreen(
-                label: 'prompt',
-                detailsPath: '/prompt/prompt_detail',
+                label: 'B',
+                detailsPath: '/b/details/1',
+                secondDetailsPath: '/b/details/2',
               ),
               routes: <RouteBase>[
                 GoRoute(
-                  path: 'prompt_detail',
+                  path: 'details/:param',
                   builder: (BuildContext context, GoRouterState state) =>
-                      PromptDetailPage(
-                    label: 'prompt_detail',
+                      DetailsScreen(
+                    label: 'B',
                     param: state.pathParameters['param'],
                   ),
                 ),
@@ -116,3 +113,4 @@ final GoRouter router = GoRouter(
     ),
   ],
 );
+*/

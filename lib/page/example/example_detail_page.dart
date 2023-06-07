@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// The details screen for either the A or B screen.
-class DetailsScreen extends StatefulWidget {
-  /// Constructs a [DetailsScreen].
-  const DetailsScreen({
+class ExampleDetailPage extends StatefulWidget {
+  /// Constructs a [ExampleDetailPage].
+  const ExampleDetailPage({
     required this.label,
     this.param,
     this.extra,
@@ -25,11 +25,11 @@ class DetailsScreen extends StatefulWidget {
   final bool withScaffold;
 
   @override
-  State<StatefulWidget> createState() => DetailsScreenState();
+  State<StatefulWidget> createState() => ExampleDetailPageState();
 }
 
 /// The state for DetailsScreen
-class DetailsScreenState extends State<DetailsScreen> {
+class ExampleDetailPageState extends State<ExampleDetailPage> {
   int _counter = 0;
 
   @override

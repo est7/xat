@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Widget for the root/initial pages in the bottom navigation bar.
-class RootScreen extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   /// Creates a RootScreen
-  const RootScreen({
+  const SettingsPage({
     required this.label,
     required this.detailsPath,
-    this.secondDetailsPath,
     super.key,
   });
 
@@ -17,14 +15,11 @@ class RootScreen extends StatelessWidget {
   /// The path to the detail page
   final String detailsPath;
 
-  /// The path to another detail page
-  final String? secondDetailsPath;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Root of section $label'),
+        title: Text(label),
       ),
       body: Center(
         child: Column(
@@ -35,18 +30,24 @@ class RootScreen extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(4)),
             TextButton(
               onPressed: () {
-                GoRouter.of(context).go(detailsPath, extra: '$label-XYZ');
+                GoRouter.of(context).go('/settings/openai_setting');
               },
-              child: const Text('View details'),
+              child: const Text('openai_setting'),
             ),
             const Padding(padding: EdgeInsets.all(4)),
-            if (secondDetailsPath != null)
-              TextButton(
-                onPressed: () {
-                  GoRouter.of(context).go(secondDetailsPath!);
-                },
-                child: const Text('View more details'),
-              ),
+            TextButton(
+              onPressed: () {
+                GoRouter.of(context).go('/settings/azure_setting');
+              },
+              child: const Text('azure_setting'),
+            ),
+            const Padding(padding: EdgeInsets.all(4)),
+            TextButton(
+              onPressed: () {
+                GoRouter.of(context).go('/settings/chat_setting');
+              },
+              child: const Text('chat_setting'),
+            ),
           ],
         ),
       ),
