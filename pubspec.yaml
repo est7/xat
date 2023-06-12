@@ -35,7 +35,7 @@ dependencies:
   openai_api: ^0.0.4+3
   # 本地环境变量
   envied: ^0.3.0+3
-  logger: ^1.3.0
+  logger: ^1.4.0
   uuid: ^3.0.7
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
@@ -43,32 +43,35 @@ dependencies:
   flutter_math_fork: ^0.7.1
   markdown: ^7.0.2
   floor: ^1.4.1
-  sqflite: ^2.2.6
   riverpod_annotation: ^2.0.1
-  bitsdojo_window: ^0.1.5
-  go_router: ^7.1.1
+  go_router: ^8.0.0
   tiktoken: ^1.0.3
-  collection: ^1.17.0
-  path_provider: ^2.0.14
+  collection: ^1.17.1
   record: ^4.4.4
   flutter_svg: ^2.0.6
   localstorage: ^4.0.1+2
   quickalert: ^1.0.1
   screenshot: ^2.1.0
-  file_picker: ^5.2.10
-  share_plus: ^6.3.4
+  file_picker: ^5.3.2
+  share_plus: ^7.0.2
   # 国际化
   flutter_localizations:
     sdk: flutter
   intl: any
   tuple: ^2.0.1
   # 网络请求
-  dio: ^4.0.4
+  dio: ^5.2.0+1
   # 弹窗
   flutter_easyloading: ^3.0.3
-
-
-
+  flash: ^3.0.5+1
+  # shared_preferences
+  shared_preferences: ^2.1.2
+  # 数据库ORM
+  sqflite: ^2.2.8+4
+  drift: any
+  sqlite3_flutter_libs: any
+  path_provider: any
+  path: ^1.8.3
 
 
 dev_dependencies:
@@ -80,14 +83,18 @@ dev_dependencies:
   # 关于停用特定的lint规则和激活其他规则的信息，请参见该文件。
   flutter_lints: ^2.0.0
   envied_generator: ^0.3.0
-  build_runner: ^2.3.3
   freezed: ^2.3.2
   json_serializable: ^6.6.1
   floor_generator: ^1.4.1
-  riverpod_generator: ^2.1.3
+  flutter_gen_runner:
+  # riverpod
+  build_runner: ^2.3.3
   custom_lint:
   riverpod_lint: ^1.1.5
-  flutter_gen_runner:
+  riverpod_generator: ^2.1.3
+  drift_dev: any
+
+
 
   # 关于这个文件的通用Dart部分的信息，请参见以下页面：https://dart.dev/tools/pub/pubspec
 

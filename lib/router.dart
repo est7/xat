@@ -6,6 +6,7 @@ import 'package:xat/page/prompt/prompt_detail_page.dart';
 import 'package:xat/page/prompt/prompt_page.dart';
 import 'package:xat/page/settings/azure_setting_page.dart';
 import 'package:xat/page/settings/chat_setting_page.dart';
+import 'package:xat/page/settings/openai_setting_page.dart';
 import 'package:xat/page/settings/settings_page.dart';
 import 'package:xat/widgets/scaffold_with_nav_bar.dart';
 
@@ -86,9 +87,10 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   path: 'openai_setting',
                   builder: (BuildContext context, GoRouterState state) =>
-                      AzureSettingPage(
+                      OpenaiSettingPage(
                     label: 'openai_setting',
                     extra: state.extra,
+                    withScaffold: false,
                   ),
                 ),
                 GoRoute(

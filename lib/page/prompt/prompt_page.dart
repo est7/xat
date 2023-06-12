@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Widget for the root/initial pages in the bottom navigation bar.
 class PromptPage extends StatelessWidget {
-  /// Creates a RootScreen
   const PromptPage({
     required this.label,
     required this.detailsPath,
@@ -20,35 +18,17 @@ class PromptPage extends StatelessWidget {
   /// The path to another detail page
   final String? secondDetailsPath;
 
+  /// GoRouter.of(context).go(detailsPath, extra: '$label-XYZ');
+  /// GoRouter.of(context).go(secondDetailsPath!);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Root of section $label'),
+        title: Text(label, style: Theme.of(context).textTheme.titleLarge),
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Screen $label',
-                style: Theme.of(context).textTheme.titleLarge),
-            const Padding(padding: EdgeInsets.all(4)),
-            TextButton(
-              onPressed: () {
-                GoRouter.of(context).go(detailsPath, extra: '$label-XYZ');
-              },
-              child: const Text('View details'),
-            ),
-            const Padding(padding: EdgeInsets.all(4)),
-            if (secondDetailsPath != null)
-              TextButton(
-                onPressed: () {
-                  GoRouter.of(context).go(secondDetailsPath!);
-                },
-                child: const Text('View more details'),
-              ),
-          ],
-        ),
+      body: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [Text('fas')],
       ),
     );
   }

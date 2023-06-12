@@ -23,12 +23,11 @@ class SettingsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(label),
+        title: Text(label, style: Theme.of(context).textTheme.titleLarge),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('Screen $label', style: Theme.of(context).textTheme.titleLarge),
           SettingCustomItem(
               title: "openai_setting",
               position: Position.single,
@@ -44,7 +43,7 @@ class SettingsPage extends ConsumerWidget {
               title: "chat_setting",
               position: Position.single,
               description: "description",
-              onClick: () => GoRouter.of(context).go('/settings/chat_setting')),
+              onClick: () => GoRouter.of(context).go('/prompt/prompt_detail')),
         ],
       ),
     );

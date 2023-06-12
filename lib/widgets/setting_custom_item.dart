@@ -34,7 +34,7 @@ class SettingCustomItem extends StatelessWidget {
             child: ListTile(
               leading: const CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(Icons.settings)),
+                  child: Icon(Icons.ac_unit_outlined,color: Colors.grey,)),
               title: Text(title),
               subtitle: description != null ? Text(description!) : null,
               trailing: const Icon(Icons.arrow_forward_ios),

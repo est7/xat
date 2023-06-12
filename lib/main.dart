@@ -13,7 +13,7 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Xat',
       routerConfig: router,
       theme: ThemeData(
         primarySwatch: Colors.blue,
