@@ -1,77 +1,40 @@
-import 'package:xat/model/prompt_bean.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:xat/lib/net/flutter_net.dart';
+import 'package:xat/lib/net/src/net_client.dart';
+import 'package:xat/model/prompt_model.dart';
+
+import '../network/my_http_decoder.dart';
 
 abstract class IPromptRepository {
-  Future<List<Map>> getPromptList();
+  Future<Result<List<PromptModel>>> getLocalPromptList();
+
+  Future<Result<List<PromptModel>>> getNetWorkPromptList(num page);
 }
 
 class PromptRepository implements IPromptRepository {
   @override
-  Future<List<Map>> getPromptList() async {
-    return [
-      {
-        "id": 1,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 2,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 3,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 4,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 5,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 6,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 7,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-      {
-        "id": 8,
-        "title": "title",
-        "content": "content",
-        "createTime": "createTime",
-        "updateTime": "updateTime",
-        "isDelete": 0,
-      },
-    ];
+  Future<Result<List<PromptModel>>> getLocalPromptList() {
+    return Future.value(null);
+  }
+
+  /**
+   *
+      appResponse.when(success: (List<PromptModel> entity) {
+      var size = entity.length;
+      debugPrint("成功返回$size条");
+      return entity;
+      }, failure: (String msg, int code) {
+      debugPrint("失败了：msg=$msg/code=$code");
+      return <PromptModel>[]; // 在失败时返回一个空列表
+      });
+   */
+  @override
+  Future<Result<List<PromptModel>>> getNetWorkPromptList(num page) async {
+    var appResponse = await get<PromptModel, List<PromptModel>>(
+        "banner/json",
+        httpDecode: MyHttpDecoder.getInstance(),
+        decodeType: const PromptModel());
+
+    return Future.value(appResponse);
   }
 }

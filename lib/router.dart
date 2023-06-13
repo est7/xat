@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xat/page/chat/chat_detail_page.dart';
 import 'package:xat/page/chat/chat_page.dart';
-import 'package:xat/page/prompt/prompt_detail_page.dart';
-import 'package:xat/page/prompt/prompt_page.dart';
+import 'package:xat/page/prompt/view/prompt_detail_page.dart';
 import 'package:xat/page/settings/azure_setting_page.dart';
 import 'package:xat/page/settings/chat_setting_page.dart';
 import 'package:xat/page/settings/openai_setting_page.dart';
 import 'package:xat/page/settings/settings_page.dart';
 import 'package:xat/widgets/scaffold_with_nav_bar.dart';
+
+import 'page/prompt/view/prompt_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -55,10 +56,7 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: '/prompt',
               builder: (BuildContext context, GoRouterState state) =>
-                  const PromptPage(
-                label: 'prompt',
-                detailsPath: '/prompt/prompt_detail',
-              ),
+                  const PromptPage(),
               routes: <RouteBase>[
                 GoRoute(
                   path: 'prompt_detail',

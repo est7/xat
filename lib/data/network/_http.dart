@@ -1,35 +1,28 @@
 //http://jsonplaceholder.typicode.com/posts?_page=1
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'API.dart';
 
-class HttpUtil {
+class _Http {
+  // 创建一个静态变量，用于存储单例对象
+  //私有属性,不能被在外调用
+  static late final _Http _singleton;
 
-  BaseOptions options;
-
-  // 私有构造函数
-  HttpUtil._privateConstructor() {
-    // 在这里进行初始化操作
-    // 例如，设置 someConfig 变量
-    options = "Initialized";
+  // 创建一个工厂方法，返回单例对象
+  factory _Http() {
+    if (_singleton == null) {
+      _singleton = _Http._internal();
+    }
+    return _singleton;
   }
 
-  static HttpUtil instance;
-  Dio dio;
+  late Dio _dioClient;
+  late BaseOptions _options;
 
-
-  CancelToken cancelToken = CancelToken();
-
-  static HttpUtil getInstance() {
-    return instance;
-  }
-
-  /*
-   * config it and create
-   */
-  HttpUtil() {
-    //BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
-    options = BaseOptions(
+  // 创建一个内部构造方法，这样可以防止外部直接创建对象
+  _Http._internal() {
+    // 进行初始化配置
+    _singleton._options = BaseOptions(
       //请求基地址,可以包含子路径
       baseUrl: Api.BASE_URL,
       //连接服务器超时时间，单位是秒.
@@ -47,36 +40,41 @@ class HttpUtil {
       responseType: ResponseType.plain,
     );
 
-    dio = Dio(options);
-
+    _dioClient = Dio(_options);
     //Cookie管理 // First request, and save cookies (CookieManager do it). but 好像没生效嘛...
-    final cookieJar = CookieJar();
-    dio.interceptors.add(CookieManager(cookieJar));
+    // final cookieJar = CookieJar();
+    // dio.interceptors.add(CookieManager(cookieJar));
 
     //添加拦截器
-    dio.interceptors.add(InterceptorsWrapper(
+    _dioClient.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-      print("请求之前 header = ${options.headers.toString()}");
+      if (kDebugMode) {
+        print("请求之前 header = ${options.headers.toString()}");
+      }
       // 如果你想完成请求并返回一些自定义数据，你可以使用 `handler.resolve(response)`。
       // 如果你想终止请求并触发一个错误，你可以使用 `handler.reject(error)`。
       return handler.next(options); //continue
     }, onResponse: (Response response, ResponseInterceptorHandler handler) {
-      print("响应之前");
+      if (kDebugMode) {
+        print("响应之前");
+      }
       // 如果你想终止请求并触发一个错误，你可以使用 `handler.reject(error)`。
       return handler.next(response); // continue
     }, onError: (DioError e, ErrorInterceptorHandler handler) {
-      print("错误之前");
+      if (kDebugMode) {
+        print("错误之前");
+      }
       // 如果你想完成请求并返回一些自定义数据，你可以使用 `handler.resolve(response)`。
       return handler.next(e);
     }));
   }
 
-  //get方式获取
-  Future get(String url, {Map<String, dynamic>? params}) async {
+//get方式获取
+  Future rawGet(String url, {data, options, cancelToken}) async {
     Response response;
     try {
       response = await _dioClient.get(url,
-          queryParameters: params, cancelToken: cancelToken);
+          queryParameters: data, options: options, cancelToken: cancelToken);
     } on DioException catch (e) {
       formatError(e);
       rethrow;
@@ -84,21 +82,46 @@ class HttpUtil {
     return response.data;
   }
 
-  //post 方式
-  Future post(String url, {Map<String, dynamic>? params}) async {
+//post 方式
+  Future rawPost(String url, {data, options, cancelToken}) async {
     Response response;
     try {
-      response =
-          await _dioClient.post(url, data: params, cancelToken: cancelToken);
+      response = await _dioClient.post(url,
+          queryParameters: data, options: options, cancelToken: cancelToken);
     } on DioException catch (e) {
       formatError(e);
-
       rethrow;
     }
     return response.data;
   }
 
   /*
+   * 下载文件
+   */
+  downloadFile(urlPath, savePath) async {
+    Response response;
+    try {
+      response = await _dioClient.download(urlPath, savePath,
+          onReceiveProgress: (int count, int total) {
+        //进度
+        if (kDebugMode) {
+          print("$count $total");
+        }
+      });
+      if (kDebugMode) {
+        print('downloadFile success---------${response.data}');
+      }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('downloadFile error---------$e');
+      }
+      formatError(e);
+      rethrow;
+    }
+    return response.data;
+  }
+
+/*
    * 取消请求
    *
    * 同一个cancel token 可以用于多个请求，当一个cancel token取消时，所有使用该cancel token的请求都会被取消。
@@ -108,7 +131,7 @@ class HttpUtil {
     token.cancel("cancelled");
   }
 
-  /*
+/*
    * error统一处理
    */
   void formatError(DioException e) {
