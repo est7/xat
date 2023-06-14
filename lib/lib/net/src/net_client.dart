@@ -7,7 +7,7 @@ import 'typedefs.dart';
 /// decodeType 为空返回原始数据
 /// 前者T是接口返回的数据需要序列化的类型，后者是开发关注的类型。比如接口返回一个用户列表，前面泛型就是User类型，后面是List<User>。
 /// 又或者接口返回的数据包了几层，我们只需要最里面的数据格式，那么前面就是需要序列化的整个数据类型
-Future<Result<K>> get<T extends MyJsonSerializable, K>(
+Future<Result<K>> get<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -36,7 +36,7 @@ Future<Result<K>> get<T extends MyJsonSerializable, K>(
 
 /// Handy method to make http POST request, which is a alias of  [dio.fetch(RequestOptions)].
 /// decodeType 为空返回原始数据
-Future<Result<K>> post<T extends MyJsonSerializable, K>(
+Future<Result<K>> post<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -67,7 +67,7 @@ Future<Result<K>> post<T extends MyJsonSerializable, K>(
 
 /// Handy method to make http PUT request, which is a alias of  [dio.fetch(RequestOptions)].
 /// decodeType 为空返回原始数据
-Future<Result<K>> put<T extends MyJsonSerializable, K>(
+Future<Result<K>> put<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -98,7 +98,7 @@ Future<Result<K>> put<T extends MyJsonSerializable, K>(
 
 /// Handy method to make http HEAD request, which is a alias of [dio.fetch(RequestOptions)].
 /// decodeType 为空返回原始数据
-Future<Result<K>> head<T extends MyJsonSerializable, K>(
+Future<Result<K>> head<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -125,7 +125,7 @@ Future<Result<K>> head<T extends MyJsonSerializable, K>(
 
 /// Handy method to make http DELETE request, which is a alias of  [dio.fetch(RequestOptions)].
 /// decodeType 为空返回原始数据
-Future<Result<K>> delete<T extends MyJsonSerializable, K>(
+Future<Result<K>> delete<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -152,7 +152,7 @@ Future<Result<K>> delete<T extends MyJsonSerializable, K>(
 
 /// Handy method to make http PATCH request, which is a alias of  [dio.fetch(RequestOptions)].
 /// decodeType 为空返回原始数据
-Future<Result<K>> patch<T extends MyJsonSerializable, K>(
+Future<Result<K>> patch<T extends BaseNetModel, K>(
   String path, {
   Object? data,
   Map<String, dynamic>? queryParameters,
@@ -214,7 +214,7 @@ void cancelRequests({CancelToken? cancelToken}) {
 }
 
 /// A method to make http request, which is a alias of  [dio.fetch(RequestOptions)].
-Future<Result<K>> _execute<T extends MyJsonSerializable, K>(
+Future<Result<K>> _execute<T extends BaseNetModel, K>(
   String path,
   String method, {
   Object? data,
@@ -272,7 +272,7 @@ Options _checkOptions(String method, Options? options) {
 }
 
 /// A method to decode the response. use isolate
-K _mapCompute<T extends MyJsonSerializable, K>(_MapBean<T> bean) {
+K _mapCompute<T extends BaseNetModel, K>(_MapBean<T> bean) {
   return bean.httpDecode
       .decode(response: bean.response, decodeType: bean.decodeType);
 }

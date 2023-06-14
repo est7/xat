@@ -1,13 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../lib/net/src/base_net_model.dart';
+import 'package:xat/lib/net/flutter_net.dart';
 
 part 'prompt_model.freezed.dart';
 
 part 'prompt_model.g.dart';
 
 @freezed
-class PromptModel  with  MyJsonSerializable<PromptModel>, _$PromptModel {
+class PromptModel with BaseNetModel , _$PromptModel {
+  const PromptModel._(); // Added constructor
   const factory PromptModel({
     int? userId,
     int? id,
@@ -19,9 +19,7 @@ class PromptModel  with  MyJsonSerializable<PromptModel>, _$PromptModel {
       _$PromptModelFromJson(json);
 
   @override
-  PromptModel fromMyJson(Map<String, dynamic> json) {
-    // TODO: implement fromMyJson
-    throw UnimplementedError();
+  fromJson(Map<String, dynamic> json) {
+    return _$PromptModelFromJson(json);
   }
-
 }

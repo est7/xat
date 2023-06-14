@@ -3,6 +3,7 @@ import 'package:xat/lib/net/flutter_net.dart';
 import 'package:xat/lib/net/src/net_client.dart';
 import 'package:xat/model/prompt_model.dart';
 
+import '../network/API.dart';
 import '../network/my_http_decoder.dart';
 
 abstract class IPromptRepository {
@@ -31,8 +32,7 @@ class PromptRepository implements IPromptRepository {
   @override
   Future<Result<List<PromptModel>>> getNetWorkPromptList(num page) async {
     var appResponse = await get<PromptModel, List<PromptModel>>(
-        "banner/json",
-        httpDecode: MyHttpDecoder.getInstance(),
+        Api.PROMPT_LIST,
         decodeType: const PromptModel());
 
     return Future.value(appResponse);

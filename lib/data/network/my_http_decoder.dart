@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../lib/net/flutter_net.dart';
+import '../../lib/net/src/base_net_model.dart';
+import '../../lib/net/src/net_decoder.dart';
 
 /// 默认解码器
 class MyHttpDecoder extends NetDecoder {
@@ -12,7 +16,7 @@ class MyHttpDecoder extends NetDecoder {
   factory MyHttpDecoder.getInstance() => _instance;
 
   @override
-  K decode<T extends MyJsonSerializable, K>(
+  K decode<T extends BaseNetModel, K>(
       {required Response<dynamic> response, required T decodeType}) {
     var errorCode = response.data['errorCode'];
 
@@ -20,16 +24,29 @@ class MyHttpDecoder extends NetDecoder {
     if (errorCode == 0) {
       var data = response.data['data'];
       if (data is List) {
-        var dataList = List<T>.from(
-            data.map((item) => decodeType.fromMyJson(item)).toList()) as K;
+        var dataList = List<T>.from(data
+            .map((item) => callFromJsonIfPresent(decodeType, item))
+            .toList()) as K;
         return dataList;
       } else {
-        var model = decodeType.fromMyJson(data) as K;
+        var model = callFromJsonIfPresent(decodeType, response.data) as K;
         return model;
       }
     } else {
       var errorMsg = response.data['errorMsg'];
       throw NetException(errorMsg, errorCode);
+    }
+  }
+
+  dynamic callFromJsonIfPresent(dynamic object, Map<String, dynamic> json) {
+    try {
+      final result = object.fromJson(json);
+      return result;
+    } on NoSuchMethodError catch (e) {
+      debugPrint("Your Model must have fromJson method");
+      rethrow;
+    } catch (e) {
+      return null;
     }
   }
 }

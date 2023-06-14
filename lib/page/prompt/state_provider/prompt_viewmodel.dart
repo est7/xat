@@ -1,9 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/page/prompt/state_provider/prompt_page_state.dart';
-import 'package:xat/page/prompt/state_provider/usecase.dart';
 
 import '../../../model/prompt_model.dart';
 import '../../../provider.dart';
+import 'prompt_usecase.dart';
 
 class PromptViewModel extends StateNotifier<PromptState> {
   final InitPromptListUsecase initPromptListUsecase;
@@ -48,7 +48,7 @@ class PromptViewModel extends StateNotifier<PromptState> {
   }
 }
 
-final promptListProvider =
+final promptViewModelProvider =
     StateNotifierProvider<PromptViewModel, PromptState>((ref) {
   final promptRepository = ref.read(promptRepositoryProvider);
   return PromptViewModel(
