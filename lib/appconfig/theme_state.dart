@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xat/model/app_config_model.dart';
 
 class ThemeState extends StateNotifier<ThemeData> {
   ThemeState() : super(_initialTheme);
@@ -22,7 +23,6 @@ class ThemeState extends StateNotifier<ThemeData> {
       primaryColor: themeColor,
       hintColor: accentColor,
     );
-
     state = themeData;
   }
 
@@ -34,6 +34,14 @@ class ThemeState extends StateNotifier<ThemeData> {
   void changeThemeColor(MaterialColor newColor) {
     _themeColor = newColor;
     themeData();
+  }
+
+  void init(AppConfig appConfig) {
+    state = ThemeData(
+      useMaterial3: true,
+      primaryColor: _themeColor,
+      hintColor: _themeColor,
+    );
   }
 }
 

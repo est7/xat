@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../provider/theme_state.dart';
+import '../../appconfig/theme_state.dart';
 
 /// The details screen for either the A or B screen.
 class ApplicationSettingPage extends ConsumerWidget {
