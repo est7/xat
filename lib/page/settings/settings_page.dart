@@ -44,7 +44,13 @@ class SettingsPage extends ConsumerWidget {
               position: Position.single,
               description: "description",
               onClick: () => GoRouter.of(context).go('/prompt/prompt_detail')),
+          SettingCustomItem(
+              title: "application_setting",
+              position: Position.single,
+              description: "Apply Theme/Multilingual Settings",
+              onClick: () => GoRouter.of(context).go('/settings/application_setting'))
         ],
+
       ),
     );
   }

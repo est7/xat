@@ -2,7 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/page/prompt/state_provider/prompt_page_state.dart';
 
 import '../../../model/prompt_model.dart';
-import '../../../provider.dart';
+import '../../../provider/repository_provider.dart';
 import 'prompt_usecase.dart';
 
 class PromptViewModel extends StateNotifier<PromptState> {
@@ -35,7 +35,7 @@ class PromptViewModel extends StateNotifier<PromptState> {
       preState = (state as PromptsLoaded).prompts;
     }
 
-    state = PromptLoading();
+    state = const PromptLoading();
     try {
       final result = await initPromptListUsecase.call();
       result.when(
