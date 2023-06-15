@@ -12,8 +12,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:xat/data/network/init_net.dart';
 import 'package:xat/model/app_config_model.dart';
 import 'generated/l10n.dart';
+import 'page/settings/state_provider/theme_setting_viewmodel.dart';
 import 'provider/root_provider.dart';
-import 'page/settings/state_provider/theme_provider.dart';
 import 'router/root_router.dart';
 
 void main() {
@@ -79,11 +79,12 @@ class MyApp extends HookConsumerWidget {
       // 如果设置为ThemeMode.light或ThemeMode.dark，那么应用会一直使用亮色主题或暗色主题，不会随系统设置改变。
       // 在大多数情况下，你可以在theme和darkTheme中分别设置亮色和暗色主题，然后将themeMode设置为ThemeMode.system，
       // 这样应用就可以根据系统设置自动切换主题了。如果你希望应用始终使用某一种主题，那么可以将themeMode设置为ThemeMode.light或ThemeMode.dark。
-      darkTheme:
-          theme.followSystemTheme ? theme.darkThemeData : theme.customThemeData,
+      darkTheme: theme.followSystemTheme
+          ? enumToThemeData(theme.darkThemeEnum)
+          : theme.customThemeData,
       themeMode: theme.followSystemTheme ? ThemeMode.system : ThemeMode.light,
       theme: theme.followSystemTheme
-          ? theme.lightThemeData
+          ? enumToThemeData(theme.lightThemeEnum)
           : theme.customThemeData,
       // theme: ThemeData.light().copyWith(
       //     extensions: [const FlashToastTheme(), const FlashBarTheme()]),

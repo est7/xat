@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:xat/data/repository/prompt_repository.dart';
 import 'package:xat/model/prompt_model.dart';
 

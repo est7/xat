@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../model/app_config_model.dart';
 part 'theme_state.freezed.dart';
 
 /*class ThemeState {
@@ -20,7 +22,7 @@ class ThemeState with _$ThemeState {
   const factory ThemeState({
     required bool followSystemTheme,
     required ThemeData customThemeData,
-    required ThemeData lightThemeData,
-    required ThemeData darkThemeData,
+    required LightEnum lightThemeEnum,
+    required DarkEnum darkThemeEnum,
   }) = _ThemeState;
 }

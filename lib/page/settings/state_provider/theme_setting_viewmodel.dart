@@ -8,9 +8,9 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
   ThemeNotifier() : super(_initialTheme);
   static final _initialTheme = ThemeState(
       followSystemTheme: true,
-      lightThemeData: enumToThemeData(LightEnumV1()),
       customThemeData: enumToThemeData(defaultThemeEnum()),
-      darkThemeData: enumToThemeData(DarkEnumV2()));
+      lightThemeEnum: LightEnumV1(),
+      darkThemeEnum: DarkEnumV2());
 
   bool followSystemTheme = true;
 
@@ -27,9 +27,9 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
   void validateThemeData() {
     if (followSystemTheme) {
       if (currentIsDarkTheme()) {
-        state = state.copyWith(darkThemeData: enumToThemeData(darkTheme));
+        state = state.copyWith(darkThemeEnum: darkTheme);
       } else {
-        state = state.copyWith(darkThemeData: enumToThemeData(darkTheme));
+        state = state.copyWith(lightThemeEnum: lightTheme);
       }
     } else {
       //或许即使自定义的Color 也可以打开暗黑模式?
@@ -74,7 +74,10 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
     return brightness == Brightness.dark;
   }
 
-  void setThemeMode(ThemeMode light) {}
+  void setThemeMode(ThemeEnum themeEnum) {
+    var themeData = enumToThemeData(themeEnum);
+    validateThemeData();
+  }
 }
 
 final themeStateProvider =

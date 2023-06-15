@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'state_provider/openai_setting_viewmodel.dart';
+import '../state_provider/openai_setting_viewmodel.dart';
 
 /// The details screen for either the A or B screen.
 class OpenaiSettingPage extends ConsumerWidget {
