@@ -1,21 +1,25 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+
+import '../page/settings/state_provider/theme_provider.dart';
 
 @HiveType(typeId: 0)
 class AppConfig extends HiveObject {
   @HiveField(0)
-  bool followSystemTheme = true;
+  late bool followSystemTheme;
 
   @HiveField(1)
-  LightEnum lightTheme = LightEnum.LightEnumV1;
+  late LightEnum lightTheme;
 
   @HiveField(2)
-  DarkEnum darkTheme = DarkEnum.DarkEnumV1;
+  late DarkEnum darkTheme;
 
+  //这里我直接把customTheme改成了int类型，int类型保存的就是 CustomTheme 的 颜色 ARGB
   @HiveField(3)
-  CustomEnum customTheme = const CustomEnum(0xFF000000);
+  late ThemeEnum customTheme;
+
   @HiveField(4)
-  String language = '';
+  late String language;
 }
 
 class AppConfigAdapter extends TypeAdapter<AppConfig> {
@@ -28,7 +32,7 @@ class AppConfigAdapter extends TypeAdapter<AppConfig> {
       ..followSystemTheme = reader.readBool()
       ..lightTheme = intToColorEnum(reader.readInt()) as LightEnum
       ..darkTheme = intToColorEnum(reader.readInt()) as DarkEnum
-      ..customTheme = CustomEnum(reader.readInt())
+      ..customTheme = intToColorEnum(reader.readInt())
       ..language = reader.readString();
   }
 
@@ -37,41 +41,52 @@ class AppConfigAdapter extends TypeAdapter<AppConfig> {
     writer.writeBool(obj.followSystemTheme);
     writer.writeInt(colorEnumToInt(obj.lightTheme));
     writer.writeInt(colorEnumToInt(obj.darkTheme));
-    writer.writeInt(obj.customTheme.value);
+    writer.writeInt(colorEnumToInt(obj.customTheme));
     writer.writeString(obj.language);
   }
 }
 
 sealed class ThemeEnum {
   final int value;
+  final MaterialColor color;
 
-  const ThemeEnum(this.value);
+  const ThemeEnum(this.value, this.color);
 }
 
-class LightEnum extends ThemeEnum {
-  const LightEnum._(int v) : super(v);
-
-  static const LightEnumV1 = LightEnum._(1);
-  static const LightEnumV2 = LightEnum._(2);
+sealed class LightEnum extends ThemeEnum {
+  const LightEnum(int v, MaterialColor c) : super(v, c);
 }
 
-class DarkEnum extends ThemeEnum {
-  const DarkEnum._(int v) : super(v);
+class LightEnumV1 extends LightEnum {
+  LightEnumV1() : super(1, Colors.red);
+}
 
-  static const DarkEnumV1 = DarkEnum._(3);
-  static const DarkEnumV2 = DarkEnum._(4);
+class LightEnumV2 extends LightEnum {
+  LightEnumV2() : super(2, Colors.green);
+}
+
+sealed class DarkEnum extends ThemeEnum {
+  const DarkEnum(int v, MaterialColor c) : super(v, c);
+}
+
+class DarkEnumV1 extends DarkEnum {
+  DarkEnumV1() : super(11, Colors.red);
+}
+
+class DarkEnumV2 extends DarkEnum {
+  DarkEnumV2() : super(12, Colors.green);
 }
 
 class CustomEnum extends ThemeEnum {
-  const CustomEnum(int color) : super(color);
+  const CustomEnum(MaterialColor c) : super(0, c);
 }
 
 // Convert enum to int
 int colorEnumToInt(ThemeEnum theme) {
   return switch (theme) {
-    LightEnum() => theme.value,
-    DarkEnum() => theme.value,
-    CustomEnum() => theme.value,
+    LightEnum() => theme.value, //这里的theme.value就是上面的1，2
+    DarkEnum() => theme.value, //这里的theme.value就是上面的11，12
+    CustomEnum() => theme.color.value, //这里的theme.color.value就是MaterialColor c
   };
 }
 
@@ -79,14 +94,18 @@ int colorEnumToInt(ThemeEnum theme) {
 ThemeEnum intToColorEnum(int index) {
   switch (index) {
     case 1:
-      return LightEnum.LightEnumV1;
+      return LightEnumV1();
     case 2:
-      return LightEnum.LightEnumV2;
-    case 3:
-      return DarkEnum.DarkEnumV1;
-    case 4:
-      return DarkEnum.DarkEnumV2;
+      return LightEnumV2();
+    case 11:
+      return DarkEnumV1();
+    case 12:
+      return DarkEnumV2();
     default:
-      return CustomEnum(index);
+      return CustomEnum(createMaterialColor(parseIntToColor(index)));
   }
+}
+
+ThemeEnum defaultThemeEnum() {
+  return CustomEnum(createMaterialColor(Colors.grey));
 }

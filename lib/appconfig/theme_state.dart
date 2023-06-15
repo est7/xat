@@ -1,50 +1,26 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xat/model/app_config_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'theme_state.freezed.dart';
 
-class ThemeState extends StateNotifier<ThemeData> {
-  ThemeState() : super(_initialTheme);
+/*class ThemeState {
+  final bool followSystemTheme;
+  final ThemeData customThemeData;
+  final ThemeData lightThemeData;
+  final ThemeData darkThemeData;
 
-  static final _initialTheme = ThemeData.light(useMaterial3: true);
+  ThemeState({required this.followSystemTheme,
+    required this.customThemeData,
+    required this.lightThemeData,
+    required this.darkThemeData});
+}*/
 
-  bool _userDarkMode = false;
-  MaterialColor _themeColor = Colors.red;
-
-  void themeData() {
-    bool isDark = _userDarkMode;
-    Brightness brightness = isDark ? Brightness.dark : Brightness.light;
-
-    MaterialColor themeColor = _themeColor;
-    Color accentColor = isDark ? themeColor[700]! : _themeColor;
-
-    ThemeData themeData = ThemeData(
-      useMaterial3: true,
-      brightness: brightness,
-      primaryColor: themeColor,
-      hintColor: accentColor,
-    );
-    state = themeData;
-  }
-
-  void toggleUserDarkMode() {
-    _userDarkMode = !_userDarkMode;
-    themeData();
-  }
-
-  void changeThemeColor(MaterialColor newColor) {
-    _themeColor = newColor;
-    themeData();
-  }
-
-  void init(AppConfig appConfig) {
-    state = ThemeData(
-      useMaterial3: true,
-      primaryColor: _themeColor,
-      hintColor: _themeColor,
-    );
-  }
+@freezed
+class ThemeState with _$ThemeState {
+  const factory ThemeState({
+    required bool followSystemTheme,
+    required ThemeData customThemeData,
+    required ThemeData lightThemeData,
+    required ThemeData darkThemeData,
+  }) = _ThemeState;
 }
-
-final themeStateProvider = StateNotifierProvider<ThemeState, ThemeData>((ref) {
-  return ThemeState();
-});
