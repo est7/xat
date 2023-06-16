@@ -11,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xat/data/network/init_net.dart';
 import 'package:xat/model/app_config_model.dart';
+import 'package:xat/util/color_util.dart';
 import 'generated/l10n.dart';
 import 'page/settings/state_provider/theme_setting_viewmodel.dart';
 import 'provider/root_provider.dart';

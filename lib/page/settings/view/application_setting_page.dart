@@ -2,23 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/model/app_config_model.dart';
 
+import '../../../widgets/theme_bottom_sheet.dart';
 import '../state_provider/theme_setting_viewmodel.dart';
 
-/// The details screen for either the A or B screen.
 class ApplicationSettingPage extends ConsumerWidget {
   final String label;
-
-  final param;
-
-  final extra;
-
   /// Constructs a [ApplicationSettingPage].
   ApplicationSettingPage({
+    Key? key,
     required this.label,
-    this.param,
-    this.extra,
-    super.key,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,7 +62,6 @@ class ApplicationSettingPage extends ConsumerWidget {
                 leading: const Icon(Icons.settings_system_daydream),
                 title: const Text('跟随系统'),
                 onTap: () {
-                  ref.read(themeStateProvider.notifier).followSystem();
                   Navigator.pop(context);
                 },
               ),
@@ -90,95 +82,80 @@ class ApplicationSettingPage extends ConsumerWidget {
             ]));
   }
 
-  ListTile themeListTile(
-      BuildContext context, WidgetRef ref, ThemeItemModel model) {
-    return ListTile(
-      leading: Icon(model.icon),
-      title: Text(model.text),
-      trailing: model.isSelect ? const Icon(Icons.check) : null,
-      onTap: () {
-        model.onTap(context, ref, model);
-        Navigator.pop(context);
-      },
-    );
-  }
-
   final List<ThemeItemModel> defaultLightThemeList = [
     ThemeItemModel(
         text: '浅色主题1',
         icon: Icons.wb_sunny,
         themeEnum: LightEnumV1(),
-        isSelect: false,
         onTap: (context, ref, model) {
-          ref.read(themeStateProvider.notifier).setThemeMode(LightEnumV1());
+          ref
+              .read(themeStateProvider.notifier)
+              .setThemeMode(newLightTheme: LightEnumV1());
         }),
     ThemeItemModel(
         text: '浅色主题2',
         icon: Icons.wb_sunny,
         themeEnum: LightEnumV2(),
-        isSelect: false,
         onTap: (context, ref, model) {
-          ref.read(themeStateProvider.notifier).setThemeMode(LightEnumV2());
+          ref
+              .read(themeStateProvider.notifier)
+              .setThemeMode(newLightTheme: LightEnumV2());
         })
   ];
+
   final List<ThemeItemModel> defaultDarkThemeList = [
     ThemeItemModel(
         text: '深色主题1',
         icon: Icons.nightlight,
         themeEnum: DarkEnumV1(),
-        isSelect: false,
         onTap: (context, ref, model) {
-          ref.read(themeStateProvider.notifier).setThemeMode(DarkEnumV1());
+          ref
+              .read(themeStateProvider.notifier)
+              .setThemeMode(newDarkTheme: DarkEnumV1());
         }),
     ThemeItemModel(
         text: '深色主题2',
         icon: Icons.nightlight,
         themeEnum: DarkEnumV2(),
-        isSelect: false,
         onTap: (context, ref, model) {
-          ref.read(themeStateProvider.notifier).setThemeMode(DarkEnumV2());
+          ref
+              .read(themeStateProvider.notifier)
+              .setThemeMode(newDarkTheme: DarkEnumV2());
         })
   ];
 
   void showLightThemeSettingSheet(BuildContext context, WidgetRef ref) {
-    LightEnum lightThemeEnum = ref.watch(themeStateProvider).lightThemeEnum;
-
-    defaultLightThemeList.forEach((element) {
-      element.isSelect = element.themeEnum.runtimeType== lightThemeEnum.runtimeType;
-    });
-
-    List<ListTile> listTiles = defaultLightThemeList
-        .map((model) => themeListTile(context, ref, model))
-        .toList();
     showModalBottomSheet(
         isScrollControlled: true,
         useRootNavigator: true,
         context: context,
-        builder: (context) => Wrap(children: listTiles));
+        builder: (context) => ThemeBottomSheet(
+              ref: ref,
+              themeList: defaultLightThemeList,
+              buildTrailing: (context, ref, model) =>
+                  ref.watch(themeStateProvider).lightThemeEnum.runtimeType ==
+                  model.themeEnum.runtimeType,
+            ));
   }
 
   void showDarkThemeSettingSheet(BuildContext context, WidgetRef ref) {
-    DarkEnum darkThemeEnum = ref.watch(themeStateProvider).darkThemeEnum;
-
-    defaultDarkThemeList.forEach((element) {
-      element.isSelect = element.themeEnum.runtimeType == darkThemeEnum.runtimeType;
-    });
-
-    List<ListTile> listTiles = defaultLightThemeList
-        .map((model) => themeListTile(context, ref, model))
-        .toList();
     showModalBottomSheet(
         isScrollControlled: true,
         useRootNavigator: true,
         context: context,
-        builder: (context) => Wrap(children: listTiles));
+        builder: (context) => ThemeBottomSheet(
+              ref: ref,
+              themeList: defaultDarkThemeList,
+              buildTrailing: (context, ref, model) =>
+                  ref.watch(themeStateProvider).darkThemeEnum.runtimeType ==
+                  model.themeEnum.runtimeType,
+            ));
   }
 }
 
 class ThemeItemModel {
   final String text;
   final IconData icon;
-  bool isSelect;
   final ThemeEnum themeEnum;
   final Function(BuildContext, WidgetRef, ThemeItemModel) onTap;
 
@@ -186,6 +163,5 @@ class ThemeItemModel {
       {required this.text,
       required this.icon,
       required this.themeEnum,
-      required this.isSelect,
       required this.onTap});
 }

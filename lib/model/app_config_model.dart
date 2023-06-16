@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../page/settings/state_provider/theme_setting_viewmodel.dart';
+import '../util/color_util.dart';
 
 @HiveType(typeId: 0)
 class AppConfig extends HiveObject {
