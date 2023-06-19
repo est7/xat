@@ -19,7 +19,6 @@ saveLanguageToLocal(LanguageConfig appConfig) async {
 }
 
 Future<void> initAppHiveConfig() async {
-  WidgetsFlutterBinding.ensureInitialized();
   final cacheDir = (await getApplicationDocumentsDirectory()).path;
   Hive.init(cacheDir);
   Hive.registerAdapter(ThemeConfigAdapter());

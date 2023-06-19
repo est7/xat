@@ -12,28 +12,27 @@ import 'package:xat/page/settings/state_provider/language_setting_viewmodel.dart
 import 'package:xat/util/color_util.dart';
 import 'generated/l10n.dart';
 import 'page/settings/state_provider/theme_setting_viewmodel.dart';
-import 'provider/root_provider.dart';
 import 'router/root_router.dart';
 
-void main() {
-  init();
-  runApp(const ProviderScope(child: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  initSetting();
+  AppConfigRecord appConfig = await initLocalStorageConfig();
+  runApp(ProviderScope(overrides: [
+    themeStateProvider.overrideWith(
+        (_) => ThemeViewModel()..initAppThemeConfig(appConfig.$1)),
+    intlStateProvider.overrideWith(
+        (_) => LanguageViewModel()..initAppIntlConfig(appConfig.$2)),
+  ], child: const MyApp()));
 }
 
-Future<void> init() async {
+void initSetting() {
   initNetConfig();
-  initLocalStorageConfig();
 }
 
-Future<void> initLocalStorageConfig() async {
-  initAppHiveConfig().then((_) => readToLocal().then((appConfig) {
-        final container = ProviderContainer();
-        final themeState = container.read(themeStateProvider.notifier);
-        final intlState = container.read(intlStateProvider.notifier);
-        themeState.initAppThemeConfig(appConfig.$1);
-        intlState.initAppIntlConfig(appConfig.$2);
-        container.dispose();
-      }));
+Future<AppConfigRecord> initLocalStorageConfig() async {
+  await initAppHiveConfig();
+  return readToLocal();
 }
 
 class MyApp extends HookConsumerWidget {

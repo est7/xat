@@ -8,15 +8,13 @@ import '../../../model/theme_enum.dart';
 import '../../../model/theme_hive_model.dart';
 
 class ThemeViewModel extends StateNotifier<ThemeState> {
-  ThemeViewModel(this.language) : super(_initialTheme);
+  ThemeViewModel() : super(_initialTheme);
 
   static final _initialTheme = ThemeState(
       followSystemTheme: true,
       customThemeEnum: defaultThemeEnum(),
       lightThemeEnum: LightEnumV1(),
-      darkThemeEnum: DarkEnumV2());
-
-  var language;
+      darkThemeEnum: DarkEnumV1());
 
   bool followSystemTheme = true;
 
@@ -112,6 +110,5 @@ class ThemeViewModel extends StateNotifier<ThemeState> {
 
 final themeStateProvider =
     StateNotifierProvider<ThemeViewModel, ThemeState>((ref) {
-  var language = ref.read(intlStateProvider);
-  return ThemeViewModel(language);
+  return ThemeViewModel();
 });
