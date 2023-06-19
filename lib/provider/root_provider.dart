@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xat/data/repository/prompt_repository.dart';
 
 import '../core/log_util.dart';
 import '../core/toast_util.dart';

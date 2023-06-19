@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xat/model/app_config_model.dart';
+import 'package:xat/page/settings/state_provider/language_setting_viewmodel.dart';
 
 import '../../../appconfig/theme_state.dart';
-import '../../../util/color_util.dart';
+import '../../../model/theme_model.dart';
 
-class ThemeNotifier extends StateNotifier<ThemeState> {
-  ThemeNotifier() : super(_initialTheme);
+class ThemeViewModel extends StateNotifier<ThemeState> {
+  ThemeViewModel(this.language) : super(_initialTheme);
+
   static final _initialTheme = ThemeState(
       followSystemTheme: true,
-      customThemeData: enumToThemeData(defaultThemeEnum()),
+      customThemeEnum: defaultThemeEnum(),
       lightThemeEnum: LightEnumV1(),
       darkThemeEnum: DarkEnumV2());
+
+  var language;
 
   bool followSystemTheme = true;
 
@@ -23,57 +27,43 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
 
   late ThemeData currentThemeData;
 
-  void changeLightTheme(LightEnum newLightTheme) {
-    validateThemeData(newLightTheme: newLightTheme);
-  }
+  Future<void> validateThemeData({
+    bool? newFollowSystemTheme,
+    LightEnum? newLightTheme,
+    ThemeEnum? newCustomTheme,
+    DarkEnum? newDarkTheme,
+  }) {
+    bool? followSystemTheme =
+        _updateState(newFollowSystemTheme, state.followSystemTheme);
 
-  void validateThemeData(
-      {bool? newFollowSystemTheme,
-      LightEnum? newLightTheme,
-      ThemeEnum? newCustomTheme,
-      DarkEnum? newDarkTheme}) {
-    bool? followSystemTheme;
-    LightEnum? lightThemeEnum;
-    ThemeData? customThemeData;
-    DarkEnum? darkThemeEnum;
+    LightEnum? lightThemeEnum =
+        _updateState(newLightTheme, state.lightThemeEnum);
 
-    if (newFollowSystemTheme != null &&
-        newFollowSystemTheme != state.followSystemTheme) {
-      followSystemTheme = newFollowSystemTheme;
-    }
+    DarkEnum? darkThemeEnum = _updateState(newDarkTheme, state.darkThemeEnum);
 
-    if (newLightTheme?.value != state.lightThemeEnum.value) {
-      lightThemeEnum = newLightTheme;
-    }
-
-    if (newDarkTheme?.value != state.darkThemeEnum.value) {
-      darkThemeEnum = newDarkTheme;
-    }
-
-    if (newCustomTheme != null) {
-      customThemeData = enumToThemeData(newCustomTheme);
-    }
+    ThemeEnum? customThemeEnum = _updateState(
+        newCustomTheme, state.customThemeEnum,
+        comparator: (a, b) => a.color?.value != b.color?.value);
 
     state = state.copyWith(
       followSystemTheme: followSystemTheme ?? state.followSystemTheme,
       lightThemeEnum: lightThemeEnum ?? state.lightThemeEnum,
-      customThemeData: customThemeData ?? state.customThemeData,
       darkThemeEnum: darkThemeEnum ?? state.darkThemeEnum,
+      customThemeEnum: customThemeEnum ?? state.customThemeEnum,
     );
+
+    return Future.value();
   }
 
-  void changeDarkTheme(DarkEnum newDarkTheme) {
-    validateThemeData(newDarkTheme: newDarkTheme);
+  T? _updateState<T>(T? newValue, T currentValue,
+      {bool Function(T, T)? comparator}) {
+    comparator ??= (a, b) => a != b;
+    return (newValue != null && comparator(newValue, currentValue))
+        ? newValue
+        : null;
   }
 
-  void changeThemeColor(MaterialColor newColor) {
-    customTheme = CustomEnum(newColor);
-    validateThemeData(
-        newFollowSystemTheme: !state.followSystemTheme,
-        newCustomTheme: customTheme);
-  }
-
-  void initAppThemeConfig(AppConfig appConfig) {
+  void initAppThemeConfig(ThemeConfig appConfig) {
 //如果是跟随系统主题,判断目前是 light 还是 dark,选用不同的 enum
     validateThemeData(
       newFollowSystemTheme: appConfig.followSystemTheme,
@@ -94,21 +84,33 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
   ///或许即使自定义的Color 也可以打开暗黑模式?
   /// Color accentColor = isDark ? themeColor[700]! : _themeColor;
   /// state = state.copyWith(customThemeData: enumToThemeData(customTheme));
-  Future<void> setThemeMode(
+  setThemeMode(
       {bool? newFollowSystemTheme,
       LightEnum? newLightTheme,
       ThemeEnum? newCustomTheme,
       DarkEnum? newDarkTheme}) {
     validateThemeData(
-        newFollowSystemTheme: newFollowSystemTheme,
-        newLightTheme: newLightTheme,
-        newCustomTheme: newCustomTheme,
-        newDarkTheme: newDarkTheme);
-    return Future.value();
+            newFollowSystemTheme: newFollowSystemTheme,
+            newLightTheme: newLightTheme,
+            newCustomTheme: newCustomTheme,
+            newDarkTheme: newDarkTheme)
+        .then((value) => saveToLocalStorage());
+  }
+
+  //持久化到 hive
+  void saveToLocalStorage() {
+    final myAppConfig = ThemeConfig()
+      ..followSystemTheme = state.followSystemTheme
+      ..lightTheme = state.lightThemeEnum
+      ..darkTheme = state.darkThemeEnum
+      ..customTheme = state.customThemeEnum;
+
+    saveThemeToLocal(myAppConfig);
   }
 }
 
 final themeStateProvider =
-    StateNotifierProvider<ThemeNotifier, ThemeState>((ref) {
-  return ThemeNotifier();
+    StateNotifierProvider<ThemeViewModel, ThemeState>((ref) {
+  var language = ref.read(intlStateProvider);
+  return ThemeViewModel(language);
 });

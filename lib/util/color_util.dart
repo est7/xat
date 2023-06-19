@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/app_config_model.dart';
+import '../model/theme_model.dart';
 
 ThemeData enumToThemeData(ThemeEnum themeEnum) {
   switch (themeEnum) {
@@ -16,6 +16,23 @@ ThemeData enumToThemeData(ThemeEnum themeEnum) {
             seedColor: Colors.green, brightness: Brightness.light),
         useMaterial3: true,
       );
+    case LightEnumV3():
+      return ThemeData.from(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blue,
+          accentColor: Colors.yellow,
+          backgroundColor: Colors.grey.shade200,
+        ).copyWith(
+          onSurface: Colors.grey.shade900,
+          onBackground: Colors.grey.shade600,
+        ),
+      ).copyWith(
+        dialogBackgroundColor: Colors.grey.shade300,
+        bottomNavigationBarTheme:
+            const BottomNavigationBarThemeData(backgroundColor: Colors.white),
+        hoverColor: Colors.grey.shade700.withOpacity(0.9),
+        toggleableActiveColor: Colors.grey.shade700,
+      );
     case DarkEnumV1():
       return ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
@@ -28,31 +45,32 @@ ThemeData enumToThemeData(ThemeEnum themeEnum) {
             seedColor: Colors.teal, brightness: Brightness.dark),
         useMaterial3: true,
       );
+    case DarkEnumV3():
+      return ThemeData.from(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blueGrey,
+          accentColor: Colors.black,
+          backgroundColor: Colors.grey.shade200,
+        ).copyWith(
+          onSurface: Colors.grey.shade900,
+          onBackground: Colors.grey.shade600,
+        ),
+      ).copyWith(
+        dialogBackgroundColor: Colors.grey.shade300,
+        bottomNavigationBarTheme:
+            const BottomNavigationBarThemeData(backgroundColor: Colors.white),
+        hoverColor: Colors.grey.shade700.withOpacity(0.9),
+        toggleableActiveColor: Colors.grey.shade700,
+      );
     case CustomEnum():
-      return ThemeData(
+      return ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: themeEnum.color!, brightness: Brightness.light),
         useMaterial3: true,
-        primaryColor: parseIntToColor(themeEnum.value),
-        brightness: Brightness.light,
       );
   }
 }
 
-MaterialColor createMaterialColor(Color color) {
-  Map<int, Color> colorMap = {
-    50: color.withOpacity(0.1),
-    100: color.withOpacity(0.2),
-    200: color.withOpacity(0.3),
-    300: color.withOpacity(0.4),
-    400: color.withOpacity(0.5),
-    500: color.withOpacity(0.6),
-    600: color.withOpacity(0.7),
-    700: color.withOpacity(0.8),
-    800: color.withOpacity(0.9),
-    900: color.withOpacity(1),
-  };
-  return MaterialColor(color.value, colorMap);
-}
-
-MaterialColor parseIntToColor(int color) {
-  return createMaterialColor(Color(color));
+Color parseIntToColor(int color) {
+  return Color(color);
 }

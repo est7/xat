@@ -1,111 +1,92 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
-import '../page/settings/state_provider/theme_setting_viewmodel.dart';
-import '../util/color_util.dart';
+import 'package:path_provider/path_provider.dart';
+import 'theme_model.dart';
 
 @HiveType(typeId: 0)
-class AppConfig extends HiveObject {
-  @HiveField(0)
+class ThemeConfig extends HiveObject {
+  @HiveField(0, defaultValue: true)
   late bool followSystemTheme;
 
-  @HiveField(1)
+  @HiveField(1, defaultValue: LightEnumV1)
   late LightEnum lightTheme;
 
-  @HiveField(2)
+  @HiveField(2, defaultValue: DarkEnumV1)
   late DarkEnum darkTheme;
 
   //这里我直接把customTheme改成了int类型，int类型保存的就是 CustomTheme 的 颜色 ARGB
-  @HiveField(3)
+  @HiveField(3, defaultValue: CustomEnum(Color(0xFF942828)))
   late ThemeEnum customTheme;
-
-  @HiveField(4)
-  late String language;
 }
 
-class AppConfigAdapter extends TypeAdapter<AppConfig> {
+@HiveType(typeId: 1)
+class LanguageConfig extends HiveObject {
+  @HiveField(0, defaultValue: true)
+  late bool followSystemLanguage;
+  @HiveField(1, defaultValue: Locale('en'))
+  late Locale locale;
+}
+
+ThemeConfig defaultThemeConfig = ThemeConfig()
+  ..followSystemTheme = true
+  ..lightTheme = LightEnumV1()
+  ..darkTheme = DarkEnumV1()
+  ..customTheme = defaultThemeEnum();
+
+LanguageConfig defaultLanguageConfig = LanguageConfig()
+  ..followSystemLanguage = true
+  ..locale = const Locale('en');
+
+class ThemeConfigAdapter extends TypeAdapter<ThemeConfig> {
   @override
   final typeId = 0;
 
   @override
-  AppConfig read(BinaryReader reader) {
-    return AppConfig()
+  ThemeConfig read(BinaryReader reader) {
+    return ThemeConfig()
       ..followSystemTheme = reader.readBool()
       ..lightTheme = intToColorEnum(reader.readInt()) as LightEnum
       ..darkTheme = intToColorEnum(reader.readInt()) as DarkEnum
-      ..customTheme = intToColorEnum(reader.readInt())
-      ..language = reader.readString();
+      ..customTheme = intToColorEnum(reader.readInt());
   }
 
   @override
-  void write(BinaryWriter writer, AppConfig obj) {
+  void write(BinaryWriter writer, ThemeConfig obj) {
     writer.writeBool(obj.followSystemTheme);
     writer.writeInt(colorEnumToInt(obj.lightTheme));
     writer.writeInt(colorEnumToInt(obj.darkTheme));
     writer.writeInt(colorEnumToInt(obj.customTheme));
-    writer.writeString(obj.language);
   }
 }
 
-sealed class ThemeEnum {
-  final int value;
-  final MaterialColor color;
-
-  const ThemeEnum(this.value, this.color);
+saveThemeToLocal(ThemeConfig appConfig) async {
+  var appConfigBox = await Hive.openBox<ThemeConfig>('theme_config');
+  await appConfigBox.put('theme_config', appConfig);
 }
 
-sealed class LightEnum extends ThemeEnum {
-  const LightEnum(int v, MaterialColor c) : super(v, c);
+saveLanguageToLocal(LanguageConfig appConfig) async {
+  var appConfigBox = await Hive.openBox<LanguageConfig>('language_config');
+  await appConfigBox.put('language_config', appConfig);
 }
 
-class LightEnumV1 extends LightEnum {
-  LightEnumV1() : super(1, Colors.red);
+Future<void> initAppHiveConfig() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final cacheDir = (await getApplicationDocumentsDirectory()).path;
+  Hive.init(cacheDir);
+  Hive.registerAdapter(ThemeConfigAdapter());
+  return Future.value();
 }
 
-class LightEnumV2 extends LightEnum {
-  LightEnumV2() : super(2, Colors.green);
-}
+//返回元组
+typedef AppConfigRecord = (ThemeConfig, LanguageConfig);
 
-sealed class DarkEnum extends ThemeEnum {
-  const DarkEnum(int v, MaterialColor c) : super(v, c);
-}
+Future<AppConfigRecord> readToLocal() async {
+  var themeConfigBox = await Hive.openBox<ThemeConfig>('theme_config');
+  var themeConfig = themeConfigBox.getAt(0);
 
-class DarkEnumV1 extends DarkEnum {
-  DarkEnumV1() : super(11, Colors.red);
-}
+  var languageConfigBox = await Hive.openBox<LanguageConfig>('language_config');
+  var languageConfig = languageConfigBox.getAt(1);
 
-class DarkEnumV2 extends DarkEnum {
-  DarkEnumV2() : super(12, Colors.green);
-}
-
-class CustomEnum extends ThemeEnum {
-  const CustomEnum(MaterialColor c) : super(0, c);
-}
-
-// Convert enum to int
-int colorEnumToInt(ThemeEnum theme) {
-  return switch (theme) {
-    LightEnum() => theme.value, //这里的theme.value就是上面的1，2
-    DarkEnum() => theme.value, //这里的theme.value就是上面的11，12
-    CustomEnum() => theme.color.value, //这里的theme.color.value就是MaterialColor c
-  };
-}
-
-// Convert int to enum
-ThemeEnum intToColorEnum(int index) {
-  switch (index) {
-    case 1:
-      return LightEnumV1();
-    case 2:
-      return LightEnumV2();
-    case 11:
-      return DarkEnumV1();
-    case 12:
-      return DarkEnumV2();
-    default:
-      return CustomEnum(createMaterialColor(parseIntToColor(index)));
-  }
-}
-
-ThemeEnum defaultThemeEnum() {
-  return CustomEnum(createMaterialColor(Colors.grey));
+  AppConfigRecord record = (themeConfig!, languageConfig!);
+  return Future.value(record);
 }

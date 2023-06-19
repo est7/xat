@@ -9,7 +9,7 @@ import '../page/settings/view/application_setting_page.dart';
 class ThemeBottomSheet extends StatelessWidget {
   final WidgetRef ref;
   final List<ThemeItemModel> themeList;
-  final bool Function(BuildContext, WidgetRef, ThemeItemModel) buildTrailing;
+  final bool Function(BuildContext, WidgetRef,int, ThemeItemModel) buildTrailing;
 
   const ThemeBottomSheet({
     Key? key,
@@ -18,15 +18,15 @@ class ThemeBottomSheet extends StatelessWidget {
     required this.buildTrailing,
   }) : super(key: key);
 
-  ListTile lightThemeListTile(BuildContext context, WidgetRef ref,
-      ThemeItemModel model, LightEnum lightThemeEnum) {
+  ListTile mapListTile(
+      BuildContext context, WidgetRef ref, int index, ThemeItemModel model) {
     return ListTile(
       leading: Icon(model.icon),
       title: Text(model.text),
       trailing:
-          buildTrailing(context, ref, model) ? const Icon(Icons.check) : null,
+          buildTrailing(context, ref,index, model) ? const Icon(Icons.check) : null,
       onTap: () {
-        model.onTap(context, ref, model);
+        model.onTap(context, ref, index, model);
         Navigator.pop(context);
       },
     );
@@ -35,13 +35,12 @@ class ThemeBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, child) {
-      final lightThemeEnum = ref.watch(themeStateProvider).lightThemeEnum;
       return Wrap(
-        children: themeList
-            .map((model) =>
-                lightThemeListTile(context, ref, model, lightThemeEnum))
-            .toList(),
-      );
+          children: themeList.asMap().entries.map((entry) {
+        var index = entry.key;
+        var model = entry.value;
+        return mapListTile(context, ref, index, model);
+      }).toList());
     });
   }
 }

@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xat/model/app_config_model.dart';
+import 'package:xat/widgets/language_bootom_sheet.dart';
+import 'package:xat/widgets/language_setting_sheet.dart';
 
+import '../../../const/constants_theme.dart';
+import '../../../model/theme_model.dart';
 import '../../../widgets/theme_bottom_sheet.dart';
 import '../state_provider/theme_setting_viewmodel.dart';
 
+/// The details screen for either the A or B screen.
 class ApplicationSettingPage extends ConsumerWidget {
   final String label;
+
+  final param;
+
+  final extra;
+
   /// Constructs a [ApplicationSettingPage].
   ApplicationSettingPage({
-    Key? key,
     required this.label,
-  }) : super(key: key);
+    this.param,
+    this.extra,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,6 +58,16 @@ class ApplicationSettingPage extends ConsumerWidget {
             showDarkThemeSettingSheet(context, ref);
           },
           child: const Text('默认暗色主题'),
+        ),
+        Container(
+          alignment: Alignment.centerLeft, // 让Text组件从左边开始
+          child: const Text('语言设置'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            showLanguageSettingSheet(context, ref);
+          },
+          child: const Text('语言'),
         )
       ],
     );
@@ -57,72 +78,33 @@ class ApplicationSettingPage extends ConsumerWidget {
         isScrollControlled: true,
         useRootNavigator: true,
         context: context,
-        builder: (context) => Wrap(children: [
-              ListTile(
-                leading: const Icon(Icons.settings_system_daydream),
-                title: const Text('跟随系统'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.wb_sunny),
-                title: const Text('浅色主题'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.nightlight_round),
-                title: const Text('暗色主题'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ]));
+        builder: (context) => ThemeBottomSheet(
+            ref: ref,
+            themeList: allThemeList,
+            buildTrailing: (context, ref, index, model) {
+              if (index == 0) {
+                return ref.watch(themeStateProvider).followSystemTheme;
+              } else {
+                if (ref.watch(themeStateProvider).followSystemTheme) {
+                  return false;
+                }
+                return switch (model.themeEnum) {
+                  LightEnum() =>
+                    ref.watch(themeStateProvider).customThemeEnum.runtimeType ==
+                        model.themeEnum.runtimeType,
+                  DarkEnum() =>
+                    ref.watch(themeStateProvider).customThemeEnum.runtimeType ==
+                        model.themeEnum.runtimeType,
+                  CustomEnum() => ref
+                          .watch(themeStateProvider)
+                          .customThemeEnum
+                          .getColorValue() ==
+                      model.themeEnum.getColorValue()
+                };
+              }
+            }));
   }
 
-  final List<ThemeItemModel> defaultLightThemeList = [
-    ThemeItemModel(
-        text: '浅色主题1',
-        icon: Icons.wb_sunny,
-        themeEnum: LightEnumV1(),
-        onTap: (context, ref, model) {
-          ref
-              .read(themeStateProvider.notifier)
-              .setThemeMode(newLightTheme: LightEnumV1());
-        }),
-    ThemeItemModel(
-        text: '浅色主题2',
-        icon: Icons.wb_sunny,
-        themeEnum: LightEnumV2(),
-        onTap: (context, ref, model) {
-          ref
-              .read(themeStateProvider.notifier)
-              .setThemeMode(newLightTheme: LightEnumV2());
-        })
-  ];
-
-  final List<ThemeItemModel> defaultDarkThemeList = [
-    ThemeItemModel(
-        text: '深色主题1',
-        icon: Icons.nightlight,
-        themeEnum: DarkEnumV1(),
-        onTap: (context, ref, model) {
-          ref
-              .read(themeStateProvider.notifier)
-              .setThemeMode(newDarkTheme: DarkEnumV1());
-        }),
-    ThemeItemModel(
-        text: '深色主题2',
-        icon: Icons.nightlight,
-        themeEnum: DarkEnumV2(),
-        onTap: (context, ref, model) {
-          ref
-              .read(themeStateProvider.notifier)
-              .setThemeMode(newDarkTheme: DarkEnumV2());
-        })
-  ];
 
   void showLightThemeSettingSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
@@ -132,7 +114,7 @@ class ApplicationSettingPage extends ConsumerWidget {
         builder: (context) => ThemeBottomSheet(
               ref: ref,
               themeList: defaultLightThemeList,
-              buildTrailing: (context, ref, model) =>
+              buildTrailing: (context, ref, _, model) =>
                   ref.watch(themeStateProvider).lightThemeEnum.runtimeType ==
                   model.themeEnum.runtimeType,
             ));
@@ -146,18 +128,25 @@ class ApplicationSettingPage extends ConsumerWidget {
         builder: (context) => ThemeBottomSheet(
               ref: ref,
               themeList: defaultDarkThemeList,
-              buildTrailing: (context, ref, model) =>
+              buildTrailing: (context, ref, _, model) =>
                   ref.watch(themeStateProvider).darkThemeEnum.runtimeType ==
                   model.themeEnum.runtimeType,
             ));
   }
+
+  void showLanguageSettingSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomDetail(context: context,
+        child:const LanguageSettingListWidget());
+
+  }
+
 }
 
 class ThemeItemModel {
   final String text;
   final IconData icon;
   final ThemeEnum themeEnum;
-  final Function(BuildContext, WidgetRef, ThemeItemModel) onTap;
+  final Function(BuildContext, WidgetRef, int, ThemeItemModel) onTap;
 
   ThemeItemModel(
       {required this.text,

@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../model/app_config_model.dart';
-import '../model/theme_model.dart';
-part 'theme_state.freezed.dart';
+part 'language_state.freezed.dart';
 
 /*class ThemeState {
   final bool followSystemTheme;
@@ -19,11 +17,9 @@ part 'theme_state.freezed.dart';
 }*/
 
 @freezed
-class ThemeState with _$ThemeState {
-  const factory ThemeState({
-    required bool followSystemTheme,
-    required ThemeEnum customThemeEnum,
-    required LightEnum lightThemeEnum,
-    required DarkEnum darkThemeEnum,
-  }) = _ThemeState;
+class LanguageState with _$LanguageState {
+  const factory LanguageState({
+    required bool followSystemLanguage,
+    required Locale currentLocale,
+  }) = _LanguageState;
 }
