@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/theme_model.dart';
+import '../model/theme_enum.dart';
 
 ThemeData enumToThemeData(ThemeEnum themeEnum) {
   switch (themeEnum) {

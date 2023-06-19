@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xat/appconfig/language_state.dart';
 import 'package:xat/model/app_config_model.dart';
 
+import '../../../model/language_hive_model.dart';
+
 class LanguageViewModel extends StateNotifier<LanguageState> {
   LanguageViewModel() : super(_initialState);
 

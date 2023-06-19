@@ -1,9 +1,7 @@
-
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../model/app_config_model.dart';
-import '../model/theme_model.dart';
+import '../model/theme_enum.dart';
+
 part 'theme_state.freezed.dart';
 
 /*class ThemeState {

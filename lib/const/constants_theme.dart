@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../model/theme_model.dart';
+import '../model/theme_enum.dart';
 import '../page/settings/state_provider/theme_setting_viewmodel.dart';
 import '../page/settings/view/application_setting_page.dart';
 

@@ -4,7 +4,8 @@ import 'package:xat/model/app_config_model.dart';
 import 'package:xat/page/settings/state_provider/language_setting_viewmodel.dart';
 
 import '../../../appconfig/theme_state.dart';
-import '../../../model/theme_model.dart';
+import '../../../model/theme_enum.dart';
+import '../../../model/theme_hive_model.dart';
 
 class ThemeViewModel extends StateNotifier<ThemeState> {
   ThemeViewModel(this.language) : super(_initialTheme);
@@ -60,7 +61,7 @@ class ThemeViewModel extends StateNotifier<ThemeState> {
     comparator ??= (a, b) => a != b;
     return (newValue != null && comparator(newValue, currentValue))
         ? newValue
-        : null;
+        : currentValue;
   }
 
   void initAppThemeConfig(ThemeConfig appConfig) {

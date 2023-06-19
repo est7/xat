@@ -4,7 +4,7 @@ import 'package:xat/widgets/language_bootom_sheet.dart';
 import 'package:xat/widgets/language_setting_sheet.dart';
 
 import '../../../const/constants_theme.dart';
-import '../../../model/theme_model.dart';
+import '../../../model/theme_enum.dart';
 import '../../../widgets/theme_bottom_sheet.dart';
 import '../state_provider/theme_setting_viewmodel.dart';
 
