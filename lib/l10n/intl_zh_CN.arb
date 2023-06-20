@@ -1,4 +1,20 @@
 {
   "_locale": "zh_CN",
-  "app_setting_language_system": "系统语言设置"
+  "section_chat": "聊天",
+  "section_prompts": "提示",
+  "section_setting": "设置",
+  "openai_setting": "OpenAI 设置",
+  "openai_setting_desc": "API 密钥，API 服务器",
+  "azure_setting": "Azure 设置",
+  "azure_setting_desc": "文本转语音",
+  "chat_setting": "聊天设置",
+  "chat_setting_desc": "文本大小，默认的 chatGPT 参数",
+  "theme_and_language": "主题和语言",
+  "theme": "主题",
+  "theme_setting": "主题设置",
+  "default_light_theme": "默认浅色主题",
+  "default_Dark_theme": "默认深色主题",
+  "language": "语言",
+  "language_setting": "语言设置",
+  "app_setting_language_system": "系统语言"
 }

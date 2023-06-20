@@ -1,4 +1,20 @@
 {
   "_locale": "es",
-  "app_setting_language_system": "西班牙语-系统语言设置"
+  "section_chat": "chat",
+  "section_prompts": "indicaciones",
+  "section_setting": "ajustes",
+  "openai_setting": "Ajuste de OpenAI",
+  "openai_setting_desc": "Clave de API, Servidor de API",
+  "azure_setting": "Ajuste de Azure",
+  "azure_setting_desc": "Texto a voz",
+  "chat_setting": "Ajuste de chat",
+  "chat_setting_desc": "Tamaño de texto, Parámetros predeterminados de chatGPT",
+  "theme_and_language": "Tema & Idioma",
+  "theme": "Tema",
+  "theme_setting": "Ajuste de tema",
+  "default_light_theme": "Tema claro predeterminado",
+  "default_Dark_theme": "Tema oscuro predeterminado",
+  "language": "Idioma",
+  "language_setting": "Ajuste de idioma",
+  "app_setting_language_system": "idioma del sistema"
 }

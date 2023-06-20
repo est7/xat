@@ -4,6 +4,7 @@ import 'package:xat/widgets/language_bootom_sheet.dart';
 import 'package:xat/widgets/language_setting_sheet.dart';
 
 import '../../../const/constants_theme.dart';
+import '../../../generated/l10n.dart';
 import '../../../model/theme_enum.dart';
 import '../../../widgets/theme_bottom_sheet.dart';
 import '../state_provider/theme_setting_viewmodel.dart';
@@ -17,7 +18,7 @@ class ApplicationSettingPage extends ConsumerWidget {
   final extra;
 
   /// Constructs a [ApplicationSettingPage].
-  ApplicationSettingPage({
+  const ApplicationSettingPage({
     required this.label,
     this.param,
     this.extra,
@@ -28,7 +29,7 @@ class ApplicationSettingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(title: const Text("Theme/Language")),
+      appBar: AppBar(title: Text(S.of(context).theme_and_language)),
       body: _buildBody(context, ref),
     );
   }
@@ -39,35 +40,35 @@ class ApplicationSettingPage extends ConsumerWidget {
       children: [
         Container(
           alignment: Alignment.centerLeft, // 让Text组件从左边开始
-          child: const Text('主题设置'),
+          child: Text(S.of(context).theme_setting),
         ),
         ElevatedButton(
           onPressed: () {
             showAllThemeSettingSheet(context, ref);
           },
-          child: const Text('主题'),
+          child: Text(S.of(context).theme),
         ),
         ElevatedButton(
           onPressed: () {
             showLightThemeSettingSheet(context, ref);
           },
-          child: const Text('默认浅色主题'),
+          child: Text(S.of(context).default_light_theme),
         ),
         ElevatedButton(
           onPressed: () {
             showDarkThemeSettingSheet(context, ref);
           },
-          child: const Text('默认暗色主题'),
+          child: Text(S.of(context).default_Dark_theme),
         ),
         Container(
           alignment: Alignment.centerLeft, // 让Text组件从左边开始
-          child: const Text('语言设置'),
+          child: Text(S.of(context).language_setting),
         ),
         ElevatedButton(
           onPressed: () {
             showLanguageSettingSheet(context, ref);
           },
-          child: const Text('语言'),
+          child: Text(S.of(context).language),
         )
       ],
     );
@@ -105,7 +106,6 @@ class ApplicationSettingPage extends ConsumerWidget {
             }));
   }
 
-
   void showLightThemeSettingSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
         isScrollControlled: true,
@@ -135,11 +135,9 @@ class ApplicationSettingPage extends ConsumerWidget {
   }
 
   void showLanguageSettingSheet(BuildContext context, WidgetRef ref) {
-    showModalBottomDetail(context: context,
-        child:const LanguageSettingListWidget());
-
+    showModalBottomDetail(
+        context: context, child: const LanguageSettingListWidget());
   }
-
 }
 
 class ThemeItemModel {

@@ -1,4 +1,20 @@
 {
   "_locale": "en",
+  "section_chat": "chat",
+  "section_prompts": "prompts",
+  "section_setting": "settings",
+  "openai_setting": "OpenAI Setting",
+  "openai_setting_desc": "API Key,API Server",
+  "azure_setting": "Azure Setting",
+  "azure_setting_desc": "Text to Speech",
+  "chat_setting": "Chat Setting",
+  "chat_setting_desc": "Text Size,Default chatGPT Params",
+  "theme_and_language": "Theme & Language",
+  "theme": "Theme",
+  "theme_setting": "Theme Setting",
+  "default_light_theme": "Default Light Theme",
+  "default_Dark_theme": "Default Dark Theme",
+  "language": "Language",
+  "language_setting": "Language Setting",
   "app_setting_language_system": "system language"
 }

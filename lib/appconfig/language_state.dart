@@ -20,6 +20,6 @@ part 'language_state.freezed.dart';
 class LanguageState with _$LanguageState {
   const factory LanguageState({
     required bool followSystemLanguage,
-    required Locale currentLocale,
+    required String currentLanguageString,
   }) = _LanguageState;
 }

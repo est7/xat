@@ -22,3 +22,11 @@ const List<Map<String, Object>> languageConfigList = [
     "locale": Locale('zh', 'HK'),
   },
 ];
+
+Locale? findLocale(String str) {
+  final localeObj = languageConfigList.firstWhere(
+        (element) => element['language'] == str,
+    orElse: () => {},
+  );
+  return localeObj.containsKey('locale') ? localeObj['locale'] as Locale : null;
+}

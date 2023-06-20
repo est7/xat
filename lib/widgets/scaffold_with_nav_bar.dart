@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../generated/l10n.dart';
+
 /// Builds the "shell" for the app by building a Scaffold with a
 /// BottomNavigationBar, where [child] is placed in the body of the Scaffold.
 class ScaffoldWithNavBar extends StatelessWidget {
@@ -22,11 +24,15 @@ class ScaffoldWithNavBar extends StatelessWidget {
         // world scenario, the items would most likely be generated from the
         // branches of the shell route, which can be fetched using
         // `navigationShell.route.branches`.
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'prompt'),
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'settings'),
+              icon: const Icon(Icons.chat), label: S.of(context).section_chat),
+          BottomNavigationBarItem(
+              icon: const Icon(Icons.book),
+              label: S.of(context).section_prompts),
+          BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: S.of(context).section_setting),
         ],
         currentIndex: navigationShell.currentIndex,
         onTap: (int index) => _onTap(context, index),

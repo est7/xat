@@ -4,6 +4,8 @@ import 'package:hive/hive.dart';
 
 import 'theme_enum.dart';
 
+
+
 @HiveType(typeId: 0)
 class ThemeConfig extends HiveObject {
   @HiveField(0, defaultValue: true)

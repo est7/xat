@@ -22,6 +22,7 @@ Future<void> initAppHiveConfig() async {
   final cacheDir = (await getApplicationDocumentsDirectory()).path;
   Hive.init(cacheDir);
   Hive.registerAdapter(ThemeConfigAdapter());
+  Hive.registerAdapter(LanguageConfigAdapter());
   return Future.value();
 }
 

@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xat/const/constants_language.dart';
 import 'package:xat/data/network/init_net.dart';
 import 'package:xat/model/app_config_model.dart';
 import 'package:xat/page/settings/state_provider/language_setting_viewmodel.dart';
@@ -77,7 +76,14 @@ class MyApp extends HookConsumerWidget {
               //   Locale('zh', ''), // Chinese
               //   Locale('es', ''), //西班牙语
               // ],
-              locale: intl.followSystemLanguage ? null : intl.currentLocale,
+              locale: intl.followSystemLanguage
+                  ? null
+                  : findLocale(intl.currentLanguageString),
+              localeListResolutionCallback: (locales, supportedLocales) {
+                debugPrint("当前地区语言$locales");
+                debugPrint("设备支持的地区语言$supportedLocales");
+                return null;
+              },
               title: 'Xat',
               routerConfig: router,
               builder: (context, child) {

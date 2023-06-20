@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/widgets/setting_custom_item.dart';
 
+import '../../../generated/l10n.dart';
+
 class SettingsPage extends ConsumerWidget {
   /// Creates a RootScreen
   const SettingsPage({
@@ -29,28 +31,28 @@ class SettingsPage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SettingCustomItem(
-              title: "openai_setting",
+              title: S.of(context).openai_setting,
+              description: S.of(context).openai_setting_desc,
               position: Position.single,
               onClick: () =>
                   GoRouter.of(context).go('/settings/openai_setting')),
           SettingCustomItem(
-              title: "azure_setting",
+              title: S.of(context).azure_setting,
               position: Position.single,
-              description: "description",
+              description: S.of(context).azure_setting_desc,
               onClick: () =>
                   GoRouter.of(context).go('/settings/azure_setting')),
           SettingCustomItem(
-              title: "chat_setting",
+              title: S.of(context).chat_setting,
               position: Position.single,
-              description: "description",
+              description: S.of(context).chat_setting_desc,
               onClick: () => GoRouter.of(context).go('/prompt/prompt_detail')),
           SettingCustomItem(
-              title: "application_setting",
+              title: S.of(context).theme_and_language,
               position: Position.single,
-              description: "Theme/Multilingual Settings",
-              onClick: () => GoRouter.of(context).go('/settings/application_setting'))
+              onClick: () =>
+                  GoRouter.of(context).go('/settings/application_setting'))
         ],
-
       ),
     );
   }

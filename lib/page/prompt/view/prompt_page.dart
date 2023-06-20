@@ -6,8 +6,11 @@ import '../state_provider/prompt_viewmodel.dart';
 
 class PromptPage extends ConsumerStatefulWidget {
   const PromptPage({
+    required this.label,
     super.key,
   });
+  /// The label
+  final String label;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PromptPageState();

@@ -14,14 +14,17 @@ class LanguageSettingListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final languageViewModel = ref.watch(intlStateProvider);
+    final languageViewState = ref.watch(intlStateProvider);
+    final languageViewModel = ref.read(intlStateProvider.notifier);
+
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(
         parent: BouncingScrollPhysics(),
       ),
       children: [
         RadioListTile(
-          value: true, // specify the value here
+          value: languageViewState.followSystemLanguage,
+          // specify the value here
           groupValue: true,
           title: Text(
             S.of(context).app_setting_language_system,
@@ -30,14 +33,18 @@ class LanguageSettingListWidget extends ConsumerWidget {
                 .bodyMedium!
                 .copyWith(fontSize: 14.sp, fontWeight: FontWeight.normal),
           ),
-          onChanged: (value) async {
-            // handle the value change
+          onChanged: (value) {
+            if (!languageViewState.followSystemLanguage) {
+              languageViewModel.setFollowSystemLanguage(true);
+            }
           },
         ),
         ...List<Widget>.generate(_languageConfig.length, (index) {
           return RadioListTile(
-            value: _languageConfig[index]["locale"].toString(),
-            groupValue: languageViewModel.followSystemLanguage,
+            value: _languageConfig[index]["language"],
+            groupValue: languageViewState.followSystemLanguage
+                ? false
+                : languageViewState.currentLanguageString,
             title: Text(
               _languageConfig[index]["language"].toString(),
               style: Theme.of(context)
@@ -46,6 +53,8 @@ class LanguageSettingListWidget extends ConsumerWidget {
                   .copyWith(fontSize: 14.sp, fontWeight: FontWeight.normal),
             ),
             onChanged: (value) async {
+              languageViewModel.setLanguage(value.toString());
+              Navigator.pop(context);
               // handle the value change
             },
           );
