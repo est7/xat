@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/page/prompt/state_provider/prompt_page_state.dart';
 
@@ -9,6 +10,7 @@ class PromptPage extends ConsumerStatefulWidget {
     required this.label,
     super.key,
   });
+
   /// The label
   final String label;
 
@@ -17,6 +19,8 @@ class PromptPage extends ConsumerStatefulWidget {
 }
 
 class _PromptPageState extends ConsumerState<PromptPage> {
+  late final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(promptViewModelProvider);
@@ -30,14 +34,57 @@ class _PromptPageState extends ConsumerState<PromptPage> {
     return state.when(
       initial: () => const Center(child: Text('No data')),
       loading: () => const Center(child: CircularProgressIndicator()),
-      loaded: (prompts) => ListView.builder(
-        itemCount: prompts.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(prompts[index].userId.toString()),
-            subtitle: Text('Age: ${prompts[index].title.toString()}'),
-          );
+      loaded: (prompts) => RefreshIndicator(
+        onRefresh: () async {
+          ref.read(promptViewModelProvider.notifier).refreshData();
         },
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: prompts.length,
+          itemBuilder: (context, index) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              margin: EdgeInsets.all(10),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      prompts[index].title ?? '',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      prompts[index].body ?? '',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    SizedBox(height: 10),
+                    Chip(
+                      label: Text('User ID: ${prompts[index].userId}'),
+                    ),
+                    SizedBox(height: 10),
+                    Chip(
+                      label: Text('Post ID: ${prompts[index].id}'),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('Read More'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
       loadedWithError: (message) => Center(child: Text('Error: $message')),
     );
@@ -52,5 +99,18 @@ class _PromptPageState extends ConsumerState<PromptPage> {
       // 在大部分情况下，你应该尽量避免使用它，因为它会使你的代码变得难以测试。
       ref.read(promptViewModelProvider.notifier).refreshData();
     });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          ref.read(promptViewModelProvider.notifier).loadMoreData();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose;
   }
 }

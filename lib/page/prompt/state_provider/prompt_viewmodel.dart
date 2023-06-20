@@ -6,24 +6,28 @@ import '../../../provider/repository_provider.dart';
 import 'prompt_usecase.dart';
 
 class PromptViewModel extends StateNotifier<PromptState> {
-  final InitPromptListUsecase initPromptListUsecase;
-  final LoadMorePromptUsecase loadMorePromptUsecase;
+  final InitPromptListUsecase _initPromptListUsecase;
+  final LoadMorePromptUsecase _loadMorePromptUsecase;
+  num _page = 1;
 
   PromptViewModel({
-    required this.initPromptListUsecase,
-    required this.loadMorePromptUsecase,
-  }) : super(const PromptInitial());
+    required InitPromptListUsecase initPromptListUsecase,
+    required LoadMorePromptUsecase loadMorePromptUsecase,
+  })  : _loadMorePromptUsecase = loadMorePromptUsecase,
+        _initPromptListUsecase = initPromptListUsecase,
+        super(const PromptInitial());
 
   Future<void> refreshData() async {
+    _page = 1;
     state = const PromptLoading();
     try {
-      final result = await initPromptListUsecase.call();
+      final result = await _initPromptListUsecase.call();
       result.when(
         success: (data) => state = PromptsLoaded(data),
         failure: (msg, code) => state = PromptsLoadedWithError(msg),
       );
     } catch (e) {
-      state = PromptsLoadedWithError( e.toString());
+      state = PromptsLoadedWithError(e.toString());
     }
   }
 
@@ -34,10 +38,10 @@ class PromptViewModel extends StateNotifier<PromptState> {
     if (state is PromptsLoaded) {
       preState = (state as PromptsLoaded).prompts;
     }
-
-    state = const PromptLoading();
+    // state = const PromptLoading();
     try {
-      final result = await initPromptListUsecase.call();
+      _page++;
+      final result = await _loadMorePromptUsecase.call(_page);
       result.when(
         success: (data) => state = PromptsLoaded([...preState, ...data]),
         failure: (msg, code) => state = PromptsLoadedWithError(msg),

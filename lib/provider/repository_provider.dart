@@ -4,6 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/repository/prompt_repository.dart';
 
-final promptRepositoryProvider = Provider.autoDispose<IPromptRepository>((ref) {
+final promptRepositoryProvider = Provider<IPromptRepository>((ref) {
   return PromptRepository();
 });
