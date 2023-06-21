@@ -1,24 +1,23 @@
 import 'dart:ui';
 
 import 'package:hive/hive.dart';
+import 'package:xat/model/theme_enum.dart';
 
-import 'theme_enum.dart';
 
-
+part 'theme_hive_model.g.dart';
 
 @HiveType(typeId: 0)
 class ThemeConfig extends HiveObject {
-  @HiveField(0, defaultValue: true)
+  @HiveField(0)
   late bool followSystemTheme;
 
-  @HiveField(1, defaultValue: LightEnumV1)
+  @HiveField(1)
   late LightEnum lightTheme;
 
-  @HiveField(2, defaultValue: DarkEnumV1)
+  @HiveField(2)
   late DarkEnum darkTheme;
 
-  //这里我直接把customTheme改成了int类型，int类型保存的就是 CustomTheme 的 颜色 ARGB
-  @HiveField(3, defaultValue: CustomEnum(Color(0xFF942828)))
+  @HiveField(3)
   late ThemeEnum customTheme;
 }
 
@@ -29,6 +28,8 @@ ThemeConfig defaultThemeConfig = ThemeConfig()
   ..customTheme = defaultThemeEnum();
 
 
+/*
+//自动生成了,不用手动写
 class ThemeConfigAdapter extends TypeAdapter<ThemeConfig> {
   @override
   final typeId = 0;
@@ -50,3 +51,4 @@ class ThemeConfigAdapter extends TypeAdapter<ThemeConfig> {
     writer.writeInt(colorEnumToInt(obj.customTheme));
   }
 }
+*/

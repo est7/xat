@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
+import '../feature/chat/presentation/view/chat_detail_page.dart';
+import '../feature/chat/presentation/view/chat_page.dart';
 import '../generated/l10n.dart';
-import '../page/chat/chat_detail_page.dart';
-import '../page/chat/chat_page.dart';
 
 List<RouteBase> chatRoute = <RouteBase>[
   GoRoute(

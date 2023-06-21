@@ -1,9 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/db/dao/chat_dao.dart';
-import '../data/db/dao/prompt_dao.dart';
-import '../data/db/dao/task_dao.dart';
-import '../data/db/global_data_base.dart';
+import '../data/source/db/dao/chat_dao.dart';
+import '../data/source/db/dao/prompt_dao.dart';
+import '../data/source/db/dao/task_dao.dart';
+import '../data/source/db/global_data_base.dart';
 
 /// 数据库
 final gDB = Provider((ref) {

@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../feature/settings/presentation/view/application_setting_page.dart';
+import '../feature/settings/presentation/viewmodels/theme_setting_viewmodel.dart';
 import '../model/theme_enum.dart';
-import '../page/settings/state_provider/theme_setting_viewmodel.dart';
-import '../page/settings/view/application_setting_page.dart';
 
 final List<ThemeItemModel> allThemeList = [
   ThemeItemModel(

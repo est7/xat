@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xat/widgets/scaffold_with_nav_bar.dart';
 
-import '../page/prompt/view/prompt_page.dart';
 import 'chat_route.dart';
 import 'prompt_route.dart';
 import 'setting_route.dart';

@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:xat/lib/net/flutter_net.dart';
 
 part 'prompt_model.freezed.dart';
-
 part 'prompt_model.g.dart';
 
 @freezed

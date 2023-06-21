@@ -8,6 +8,16 @@
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    - '**/*.freezed.dart'
+    - '**/*.mocks.dart'
+  errors:
+    missing_required_param: warning
+    missing_return: warning
+  enable-experiment:
+    - records
+    - patterns
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -22,8 +32,21 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    unnecessary_overrides: false
+    use_key_in_widget_constructors: false
+    avoid_void_async: true
+    cancel_subscriptions: true
+    package_api_docs: true
+    prefer_final_in_for_each: true
+    prefer_single_quotes: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    unawaited_futures: true
+    use_colored_box: true
+    use_decorated_box: true
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

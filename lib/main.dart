@@ -5,12 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xat/const/constants_language.dart';
-import 'package:xat/data/network/init_net.dart';
 import 'package:xat/model/app_config_model.dart';
-import 'package:xat/page/settings/state_provider/language_setting_viewmodel.dart';
 import 'package:xat/util/color_util.dart';
+import 'data/source/network/init_net.dart';
+import 'feature/settings/presentation/viewmodels/language_setting_viewmodel.dart';
+import 'feature/settings/presentation/viewmodels/theme_setting_viewmodel.dart';
 import 'generated/l10n.dart';
-import 'page/settings/state_provider/theme_setting_viewmodel.dart';
 import 'router/root_router.dart';
 
 void main() async {

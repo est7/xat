@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:xat/page/settings/view/application_setting_page.dart';
 
+import '../feature/settings/presentation/view/application_setting_page.dart';
+import '../feature/settings/presentation/view/azure_setting_page.dart';
+import '../feature/settings/presentation/view/chat_setting_page.dart';
+import '../feature/settings/presentation/view/openai_setting_page.dart';
+import '../feature/settings/presentation/view/settings_page.dart';
 import '../generated/l10n.dart';
-import '../page/settings/view/azure_setting_page.dart';
-import '../page/settings/view/chat_setting_page.dart';
-import '../page/settings/view/openai_setting_page.dart';
-import '../page/settings/view/settings_page.dart';
 
 List<RouteBase> settingRoute = <RouteBase>[
   GoRoute(
