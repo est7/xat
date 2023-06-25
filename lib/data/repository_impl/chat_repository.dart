@@ -1,15 +1,7 @@
+import '../../feature/chat/domian/repository/chat_repository.dart';
 import '../../lib/net/src/result.dart';
 import '../../model/chat_model.dart';
 
-abstract class IChatRepository {
-  Future<Result<List<ChatModel>>> getAllChatList();
-
-  Future<bool> deleteChatItemById(num uId);
-
-  Future<bool> createChatItem();
-
-  Future<bool> updateChatItem();
-}
 
 class ChatRepository implements IChatRepository {
   @override

@@ -1,7 +1,6 @@
 import 'package:xat/model/prompt_model.dart';
-
-import '../../../../data/repository_impl/prompt_repository.dart';
 import '../../../../lib/net/src/result.dart';
+import '../repository/prompt_repository.dart';
 
 class InitPromptListUsecase {
   final IPromptRepository repository;

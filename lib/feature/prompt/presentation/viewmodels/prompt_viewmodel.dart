@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../model/prompt_model.dart';
 import '../../../chat/domian/repository/chat_repository.dart';
 import '../../domian/model/prompt_page_state.dart';
+import '../../domian/repository/prompt_repository.dart';
 import '../../domian/usecase/prompt_usecase.dart';
 
 class PromptViewModel extends StateNotifier<PromptState> {
@@ -21,7 +22,7 @@ class PromptViewModel extends StateNotifier<PromptState> {
     _page = 1;
     state = const PromptLoading();
     try {
-      final result = await _initPromptListUsecase.call();
+      final result = await _initPromptListUsecase();
       result.when(
         success: (data) => state = PromptsLoaded(data),
         failure: (msg, code) => state = PromptsLoadedWithError(msg),
@@ -41,7 +42,7 @@ class PromptViewModel extends StateNotifier<PromptState> {
     // state = const PromptLoading();
     try {
       _page++;
-      final result = await _loadMorePromptUsecase.call(_page);
+      final result = await _loadMorePromptUsecase(_page);
       result.when(
         success: (data) => state = PromptsLoaded([...preState, ...data]),
         failure: (msg, code) => state = PromptsLoadedWithError(msg),

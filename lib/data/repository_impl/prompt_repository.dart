@@ -2,13 +2,8 @@ import 'package:xat/lib/net/flutter_net.dart';
 import 'package:xat/lib/net/src/net_client.dart';
 import 'package:xat/model/prompt_model.dart';
 
+import '../../feature/prompt/domian/repository/prompt_repository.dart';
 import '../source/network/API.dart';
-
-abstract class IPromptRepository {
-  Future<Result<List<PromptModel>>> getLocalPromptList();
-
-  Future<Result<List<PromptModel>>> getNetWorkPromptList(num page);
-}
 
 class PromptRepository implements IPromptRepository {
   @override

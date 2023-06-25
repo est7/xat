@@ -1,6 +1,6 @@
-import '../../../../data/repository_impl/chat_repository.dart';
 import '../../../../lib/net/src/result.dart';
 import '../../../../model/chat_model.dart';
+import '../repository/chat_repository.dart';
 
 class InitChatListUsecase {
   final IChatRepository repository;

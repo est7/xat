@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../prompt/domian/repository/prompt_repository.dart';
 import '../../domian/model/chat_page_state.dart';
+import '../../domian/repository/chat_repository.dart';
 import '../../domian/usecase/chat_usecase.dart';
 
 class ChatViewModel extends StateNotifier<ChatState> {
