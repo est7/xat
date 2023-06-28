@@ -1,8 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../prompt/domian/repository/prompt_repository.dart';
 import '../../domian/model/chat_page_state.dart';
-import '../../domian/repository/chat_repository.dart';
 import '../../domian/usecase/chat_usecase.dart';
 
 class ChatViewModel extends StateNotifier<ChatState> {
@@ -17,7 +15,7 @@ class ChatViewModel extends StateNotifier<ChatState> {
         super(const ChatInitial());
 
   Future<void> getAllChatList() async {
-    var result = await _initChatListUsecase.call();
+    var result = await _initChatListUsecase();
     result.when(
       success: (data) => state = ChatState.loaded(data),
       failure: (msg, code) =>

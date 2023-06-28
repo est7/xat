@@ -1,20 +1,48 @@
 import 'package:drift/drift.dart';
-import 'package:xat/model/chat_model.dart';
+import 'package:xat/data/entity/chat_entity.dart';
 
 import '../global_data_base.dart';
 import '../table/chats_table.dart';
 
 part 'chat_dao.g.dart';
 
+/**
+ * https://juejin.cn/post/7033548047359410184
+ * 学习使用 drfit api 进行 CURD
+ */
 @DriftAccessor(tables: [ChatsTable])
 class ChatDao extends DatabaseAccessor<GlobalDatabase> with _$ChatDaoMixin {
   ChatDao(super.attachedDatabase);
 
-  Future<void> insertChatItem(List<ChatModel> chat) async {
-    // await into(chat).insertAllOnConflictUpdate(chat);
+  Future<List<chat>> getAllChatList() => select(chatsTable).get();
+
+  Future<void> insertChatItem(ChatsTableCompanion chat) async {
+    await into(chatsTable).insert(chat);
   }
 
-  Future<void> insertChatItems(List<ChatModel> chats) async {
-    // await into(chats).insertAllOnConflictUpdate(chats);
+  Future<void> insertChatItems(List<ChatsTableCompanion> chats) async {
+    return batch((batch) {
+      batch.insertAll(chatsTable, chats);
+    });
   }
+
+  Future<void> deleteChatItem(int id) async {
+    await (delete(chatsTable)..where((chat) => chat.id.equals(id))).go();
+  }
+
+
+
+/*
+  Future<List<ChatEntity>> searchEntity(String keyword) {
+    // assume that an entry is important if it has the string "important" somewhere in its content
+    final hasKeyWordTitle = chatsTable.name.like(keyword);
+
+    return select(chatsTable).addColumns([hasKeyWordTitle]).map((row) {
+      final entry = row.readTable(chatsTable);
+      final entryHasKeyWord = row.read(hasKeyWordTitle);
+
+      return null
+    }).get();
+  }
+*/
 }

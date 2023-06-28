@@ -3,6 +3,9 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:xat/data/source/db/dao/chat_detail_dao.dart';
+import 'package:xat/data/source/db/table/chat_detail_table.dart';
+import 'package:xat/feature/chat/presentation/view/chat_detail_page.dart';
 
 import 'dao/chat_dao.dart';
 import 'dao/prompt_dao.dart';
@@ -14,8 +17,8 @@ import 'table/tasks_table.dart';
 part 'global_data_base.g.dart';
 
 @DriftDatabase(
-    tables: [ChatsTable, PromptsTable, TasksTable],
-    daos: [ChatDao, PromptDao, TaskDao])
+    tables: [ChatsTable, ChatDetailTable, PromptsTable, TasksTable],
+    daos: [ChatDao, ChatDetailDao, PromptDao, TaskDao])
 class GlobalDatabase extends _$GlobalDatabase {
   GlobalDatabase() : super(_openConnection());
 
