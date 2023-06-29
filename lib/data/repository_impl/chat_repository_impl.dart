@@ -16,19 +16,22 @@ class ChatRepositoryImpl extends _$ChatRepositoryImpl
   late final chatListDao = ref.watch(chatDaoProvider);
 
   @override
-  Future<List<ChatModel>> build() async {
+  Future< List<ChatModel>> build() async {
     var allChatList = await chatListDao.getAllChatList();
     return ChatMapper.transformToModelList(allChatList);
   }
 
   @override
-  Future<bool> createChatItem() {
-    return Future.value(true);
+  Future<Result<ChatModel>> createChatItem(ChatModel chatModel) async {
+    var chatsTableCompanion = ChatsTableCompanion.insert(
+        name: chatModel.title, description: chatModel.desc);
+    var rowId = await chatListDao.insertChatItem(chatsTableCompanion);
+    return await _getChatItemById(rowId);
   }
 
   @override
-  Future<bool> deleteChatItemById(num uId) {
-    return Future.value(true);
+  Future<Result<ChatModel>> deleteChatItemById(num uId) async {
+    return Result.failure();
   }
 
   @override
@@ -38,7 +41,15 @@ class ChatRepositoryImpl extends _$ChatRepositoryImpl
   }
 
   @override
-  Future<bool> updateChatItem() {
-    return Future.value(true);
+  Future<Result<ChatModel>> updateChatItem(ChatModel chatModel) async {
+    return const Result.failure();
+  }
+
+  Future<Result<ChatModel>> _getChatItemById(int rowId) {
+    return chatListDao.getChatItemById(rowId).then((value) {
+      return Result.success(ChatMapper.transformToModel(value));
+    }).catchError((error) {
+      return const Result.failure(msg: '没有该 Chat Item', code: -1);
+    });
   }
 }

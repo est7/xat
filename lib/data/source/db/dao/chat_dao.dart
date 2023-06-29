@@ -16,8 +16,8 @@ class ChatDao extends DatabaseAccessor<GlobalDatabase> with _$ChatDaoMixin {
 
   Future<List<chat>> getAllChatList() => select(chatsTable).get();
 
-  Future<void> insertChatItem(ChatsTableCompanion chat) async {
-    await into(chatsTable).insert(chat);
+  Future<int> insertChatItem(ChatsTableCompanion chat) async {
+    return await into(chatsTable).insert(chat);
   }
 
   Future<void> insertChatItems(List<ChatsTableCompanion> chats) async {
@@ -30,7 +30,10 @@ class ChatDao extends DatabaseAccessor<GlobalDatabase> with _$ChatDaoMixin {
     await (delete(chatsTable)..where((chat) => chat.id.equals(id))).go();
   }
 
-
+  Future<ChatEntity> getChatItemById(int id) async {
+    return (select(chatsTable)..where((chat) => chat.id.equals(id)))
+        .getSingle();
+  }
 
 /*
   Future<List<ChatEntity>> searchEntity(String keyword) {

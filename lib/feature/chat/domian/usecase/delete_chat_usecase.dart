@@ -4,14 +4,14 @@ import '../../../../data/source/db/global_data_base.dart';
 import '../../../../lib/net/src/result.dart';
 import '../../../../model/chat_model.dart';
 
-part 'create_chat_usecase.g.dart';
+part 'delete_chat_usecase.g.dart';
 
 @riverpod
-class CreateChatSectionUsecase extends _$CreateChatSectionUsecase {
+class DeleteChatSectionUsecase extends _$DeleteChatSectionUsecase {
   @override
-  Future<Result> build(ChatModel chatModel) async {
+  Future<Result> build(int uId) async {
     final repository = ref.read(chatRepositoryImplProvider.notifier);
-    var result =  await repository.createChatItem(chatModel);
+    var result = await repository.deleteChatItemById(uId);
     return result;
   }
 }

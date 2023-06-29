@@ -7,15 +7,9 @@ import '../../../../model/chat_model.dart';
 abstract class IChatRepository {
   Future<Result<List<ChatModel>>> getAllChatList();
 
-  Future<bool> deleteChatItemById(num uId);
+  Future<Result<ChatModel>> deleteChatItemById(num uId);
 
-  Future<bool> createChatItem();
+  Future<Result<ChatModel>> createChatItem(ChatModel chatModel);
 
-  Future<bool> updateChatItem();
+  Future<Result<ChatModel>> updateChatItem(ChatModel chatModel);
 }
-
-
-
-/*final chatRepositoryProvider = Provider<IChatRepository>((ref) {
-  return ChatRepository();
-});*/
