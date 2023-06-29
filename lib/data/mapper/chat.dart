@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:xat/model/chat_model.dart';
 
 import '../entity/chat_entity.dart';
-import '../source/db/global_data_base.dart';
 
 class ChatMapper {
   static ChatModel transformToModel(ChatEntity entity) {

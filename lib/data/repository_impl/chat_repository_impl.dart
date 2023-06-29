@@ -16,9 +16,10 @@ class ChatRepositoryImpl extends _$ChatRepositoryImpl
   late final chatListDao = ref.watch(chatDaoProvider);
 
   @override
-  Future< List<ChatModel>> build() async {
+  Future<Result<List<ChatModel>>> build() async {
     var allChatList = await chatListDao.getAllChatList();
-    return ChatMapper.transformToModelList(allChatList);
+    return Future.value(
+        Result.success(ChatMapper.transformToModelList(allChatList)));
   }
 
   @override
