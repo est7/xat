@@ -9,9 +9,8 @@ part 'create_chat_usecase.g.dart';
 @riverpod
 class CreateChatSectionUsecase extends _$CreateChatSectionUsecase {
   @override
-  Future<Result> build(ChatModel chatModel) async {
+  Future<Result<ChatModel>> build(ChatModel chatModel) {
     final repository = ref.read(chatRepositoryImplProvider.notifier);
-    var result =  await repository.createChatItem(chatModel);
-    return result;
+    return repository.createChatItem(chatModel);
   }
 }

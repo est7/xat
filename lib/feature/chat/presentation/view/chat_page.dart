@@ -22,10 +22,9 @@ class ChatPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var chatViewModel = ref.watch(chatViewModelProvider.notifier);
-
+    var chatViewModel = ref.watch(chatViewModelProvider);
     useEffect(() {
-      chatViewModel.getAllChatList();
+      // chatViewModel.getAllChatList();
       // 下面这行返回一个 cleanup 函数，当组件卸载时会执行这个函数。
       // 如果你没有需要在卸载时执行的操作，就直接返回空函数即可。
       return () {};
@@ -34,10 +33,10 @@ class ChatPage extends HookConsumerWidget {
       appBar: AppBar(
         title: Text(label),
       ),
-      body: _buildBody(ref, chatViewModel.state, context),
+      body: _buildBody(ref, chatViewModel, context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _createChatSection(chatViewModel, context);
+        onPressed: () {
+          _createChatSection(ref, context);
         },
         tooltip: 'create_chat',
         child: const Icon(Icons.add),
@@ -45,18 +44,20 @@ class ChatPage extends HookConsumerWidget {
     );
   }
 
+/*
   Widget _buildBody(WidgetRef ref, ChatState state, BuildContext context) {
     return state.when(
-      initial: () => const Center(child: Text('No data')),
+      initial: () => const Center(child: Text('initial')),
       loading: () => const Center(child: CircularProgressIndicator()),
       loaded: (chats) => RefreshIndicator(
           onRefresh: () async {
             await ref.read(chatViewModelProvider.notifier).getAllChatList();
           },
           child: _buildList(chats)),
-      loadedWithError: (error) => const Center(child: Text('Error')),
+      loadedWithError: (error) => Center(child: Text(error)),
     );
   }
+*/
 
   ListView _buildList(List<ChatModel> chats) {
     return ListView.builder(
@@ -108,15 +109,29 @@ class ChatPage extends HookConsumerWidget {
     sectionId: 2,
   );
 
-  Future<void> _createChatSection(
-      ChatViewModel chatViewModel, BuildContext context) async {
+  _createChatSection(WidgetRef ref, BuildContext context) {
+    final model = ref.watch(chatViewModelProvider.notifier);
     //创建新聊天会话
     bool longPressed = false;
     if (!longPressed) {
-      await chatViewModel.createChatSection(defaultChatModel);
+      // chatViewModel.getAllChatList();
+      model.createChatSection(defaultChatModel);
     } else {
       showEditChatPromptDialog();
     }
     //跳转
+  }
+
+  _buildBody(
+      WidgetRef ref, AsyncValue<List<ChatModel>> state, BuildContext context) {
+    return state.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text(error.toString())),
+      data: (chats) => RefreshIndicator(
+          onRefresh: () async {
+            ref.refresh(chatViewModelProvider);
+          },
+          child: _buildList(chats)),
+    );
   }
 }
