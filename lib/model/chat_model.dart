@@ -8,8 +8,8 @@ part 'chat_model.g.dart';
 class ChatModel with _$ChatModel {
   const factory ChatModel(
       {required int uId,
-      required String title,
-      required String desc,
+      String? title,
+      String? desc,
       required int sectionId}) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

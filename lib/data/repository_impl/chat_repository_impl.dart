@@ -24,7 +24,7 @@ class ChatRepositoryImpl extends _$ChatRepositoryImpl
   @override
   Future<Result<ChatModel>> createChatItem(ChatModel chatModel) async {
     var chatsTableCompanion = ChatsTableCompanion.insert(
-        name: chatModel.title, description: chatModel.desc);
+        name: chatModel.title!, description: chatModel.desc!);
     var rowId = await chatListDao.insertChatItem(chatsTableCompanion);
     return await _getChatItemById(rowId);
   }
