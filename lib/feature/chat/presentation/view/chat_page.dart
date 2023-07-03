@@ -110,7 +110,7 @@ class ChatPage extends HookConsumerWidget {
   );
 
   _createChatSection(WidgetRef ref, BuildContext context) {
-    final model = ref.watch(chatViewModelProvider.notifier);
+    final model = ref.read(chatViewModelProvider.notifier);
     //创建新聊天会话
     bool longPressed = false;
     if (!longPressed) {
@@ -122,16 +122,22 @@ class ChatPage extends HookConsumerWidget {
     //跳转
   }
 
-  _buildBody(
-      WidgetRef ref, AsyncValue<List<ChatModel>> state, BuildContext context) {
+  _buildBody(WidgetRef ref, AsyncValue<ChatState> state, BuildContext context) {
     return state.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text(error.toString())),
-      data: (chats) => RefreshIndicator(
-          onRefresh: () async {
-            ref.refresh(chatViewModelProvider);
-          },
-          child: _buildList(chats)),
+      data: (chatState) => chatState.when(
+        initial: () {},
+        loading: () {},
+        loaded: (chatList) {
+          return RefreshIndicator(
+              onRefresh: () async {
+                ref.refresh(chatViewModelProvider);
+              },
+              child: _buildList(chatList));
+        },
+        loadedWithError: (message) {},
+      ),
     );
   }
 }

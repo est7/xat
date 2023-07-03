@@ -16,12 +16,12 @@ class InitAllChatListUsecase extends _$InitAllChatListUsecase {
 }
 
 
-@riverpod
-class StreamUsecase extends _$StreamUsecase {
-  @override
-  FutureOr<Result<List<ChatModel>>> build() async {
-    final repository = ref.watch(DBStreamProvider).valueOrNull;
-    if (repository == null) return const Result.failure();
-    return Result.success(repository);
-  }
-}
+// @riverpod
+// class StreamUsecase extends _$StreamUsecase {
+//   @override
+//   FutureOr<Result<List<ChatModel>>> build() async {
+//     final repository = ref.watch(DBStreamProvider).valueOrNull;
+//     if (repository == null) return const Result.failure();
+//     return Result.success(repository);
+//   }
+// }
