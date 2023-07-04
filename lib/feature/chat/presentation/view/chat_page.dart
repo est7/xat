@@ -47,21 +47,6 @@ class ChatPage extends HookConsumerWidget {
     );
   }
 
-/*
-  Widget _buildBody(WidgetRef ref, ChatState state, BuildContext context) {
-    return state.when(
-      initial: () => const Center(child: Text('initial')),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      loaded: (chats) => RefreshIndicator(
-          onRefresh: () async {
-            await ref.read(chatViewModelProvider.notifier).getAllChatList();
-          },
-          child: _buildList(chats)),
-      loadedWithError: (error) => Center(child: Text(error)),
-    );
-  }
-*/
-
   ListView _buildList(List<ChatModel> chats) {
     return ListView.builder(
       itemCount: chats.length,
@@ -126,8 +111,13 @@ class ChatPage extends HookConsumerWidget {
   }
 
   _buildBody(WidgetRef ref, BuildContext context) {
-    var state = ref.watch(chatViewModelProvider);
-    return state.requireValue.when(
+    final (:isInitialLoading, :data) = ref.watch(chatViewModelProvider.select(
+      (v) => (
+        isInitialLoading: v.isLoading && !v.isRefreshing && !v.isReloading,
+        data: v.asData?.value,
+      ),
+    ));
+    return data!.when(
       initial: () => const Center(child: CircularProgressIndicator()),
       loading: () => const Center(child: CircularProgressIndicator()),
       loaded: (chatList) {
