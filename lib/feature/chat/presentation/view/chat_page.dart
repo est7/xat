@@ -114,7 +114,7 @@ class ChatPage extends HookConsumerWidget {
     final (:isInitialLoading, :data) = ref.watch(chatViewModelProvider.select(
       (v) => (
         isInitialLoading: v.isLoading && !v.isRefreshing && !v.isReloading,
-        data: v.asData?.value,
+        data: v.value,
       ),
     ));
     return data!.when(
