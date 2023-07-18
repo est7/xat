@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:xat/router/root_router.dart';
 
 import '../feature/chat/presentation/view/chat_detail_page.dart';
 import '../feature/chat/presentation/view/chat_page.dart';
@@ -16,8 +17,21 @@ List<RouteBase> chatRoute = <RouteBase>[
       // 这将覆盖屏幕A，但不包括应用程序外壳(application shell)（底部导航栏）。
       GoRoute(
         path: 'detail',
-        builder: (BuildContext context, GoRouterState state) =>
-            const ChatDetailPage(label: 'chat_detail'),
+        parentNavigatorKey: rootNavigatorKey,
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            CustomTransitionPage(
+                key: state.pageKey,
+                child: ChatDetailPage(),
+                transitionsBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child,
+                ) =>
+                    FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    )),
       ),
     ],
   ),

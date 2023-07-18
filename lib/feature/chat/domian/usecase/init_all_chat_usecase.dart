@@ -9,12 +9,11 @@ part 'init_all_chat_usecase.g.dart';
 class InitAllChatListUsecase extends _$InitAllChatListUsecase {
   @override
   FutureOr<Result<List<ChatModel>>> build() async {
-    final repository = ref.watch(chatRepositoryImplProvider).valueOrNull;
-    if (repository == null) return const Result.failure();
-    return Result.success(repository);
+    final chatModelList = ref.watch(chatRepositoryImplProvider).valueOrNull;
+    if (chatModelList == null) return const Result.failure();
+    return Result.success(chatModelList);
   }
 }
-
 
 // @riverpod
 // class StreamUsecase extends _$StreamUsecase {

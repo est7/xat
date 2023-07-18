@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../model/chat_model.dart';
 import '../../../../widgets/position_retained_scrollphysics.dart';
-import '../../domian/model/chat_page_state.dart';
 import '../viewmodels/chat_viewmodel.dart';
 
 class ChatPage extends HookConsumerWidget {
@@ -26,12 +25,14 @@ class ChatPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final chatViewModel = ref.read(chatViewModelProvider.notifier);
     useEffect(() {
-      // chatViewModel.getAllChatList();
+      // chatViewModel.getChatSectionList();
       // 下面这行返回一个 cleanup 函数，当组件卸载时会执行这个函数。
       // 如果你没有需要在卸载时执行的操作，就直接返回空函数即可。
+      // 返回一个 cleanup 函数，在组件卸载时取消订阅
       return () {};
-    }, const []); // 依赖列表为空，说明这个 effect 只在组件挂载时执行一次。
+    }, []); // 依赖列表为空，说明这个 effect 只在组件挂载时执行一次。
     return Scaffold(
       appBar: AppBar(
         title: Text(label),
@@ -111,13 +112,8 @@ class ChatPage extends HookConsumerWidget {
   }
 
   _buildBody(WidgetRef ref, BuildContext context) {
-    final (:isInitialLoading, :data) = ref.watch(chatViewModelProvider.select(
-      (v) => (
-        isInitialLoading: v.isLoading && !v.isRefreshing && !v.isReloading,
-        data: v.value,
-      ),
-    ));
-    return data!.when(
+    final data = ref.watch(chatViewModelProvider);
+    return data.when(
       initial: () => const Center(child: CircularProgressIndicator()),
       loading: () => const Center(child: CircularProgressIndicator()),
       loaded: (chatList) {
@@ -128,6 +124,7 @@ class ChatPage extends HookConsumerWidget {
             child: _buildList(chatList));
       },
       loadedWithError: (message) => Center(child: Text(message.toString())),
+      add: (ChatModel model) {},
     );
   }
 

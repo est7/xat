@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// The details screen for either the A or B screen.
-class ChatDetailPage extends StatefulWidget {
-  /// Constructs a [ChatDetailPage].
-  const ChatDetailPage({
-    required this.label,
-    this.param,
-    this.extra,
-    this.withScaffold = true,
-    super.key,
-  });
+import '../../../../model/message_model.dart';
+import '../widgets/message_item.dart';
 
-  /// The label to display in the center of the screen.
-  final String label;
+class ChatDetailPage extends StatelessWidget {
+  ChatDetailPage({super.key, this.withScaffold = true});
 
-  /// Optional param
-  final String? param;
-
-  /// Optional extra object
-  final Object? extra;
-
-  /// Wrap in scaffold
   final bool withScaffold;
 
-  @override
-  State<StatefulWidget> createState() => ChatDetailPageState();
-}
-
-/// The state for DetailsScreen
-class ChatDetailPageState extends State<ChatDetailPage> {
-  int _counter = 0;
+  final List<MessageModel> messages = [
+    MessageModel(
+        uId: 1, content: "Hello", isUser: true, timestamp: DateTime.now()),
+    MessageModel(
+        uId: 2,
+        content: "How are you?",
+        isUser: false,
+        timestamp: DateTime.now()),
+    MessageModel(
+        uId: 3,
+        content: "Fine,Thank you. And you?",
+        isUser: true,
+        timestamp: DateTime.now()),
+    MessageModel(
+        uId: 3,
+        content: "I am fine.",
+        isUser: false,
+        timestamp: DateTime.now()),
+  ];
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    if (widget.withScaffold) {
+    if (withScaffold) {
       return Scaffold(
+        bottomNavigationBar: null,
         appBar: AppBar(
-          title: Text('Details Screen - ${widget.label}'),
+          title: const Text('Chat Screen'),
         ),
         body: _build(context),
       );
@@ -49,42 +48,50 @@ class ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  Widget _build(BuildContext context) {
-    return Center(
+  _build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Details for ${widget.label} - Counter: $_counter',
-              style: Theme.of(context).textTheme.titleLarge),
-          const Padding(padding: EdgeInsets.all(4)),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _counter++;
-              });
-            },
-            child: const Text('Increment counter'),
-          ),
-          const Padding(padding: EdgeInsets.all(8)),
-          if (widget.param != null)
-            Text('Parameter: ${widget.param!}',
-                style: Theme.of(context).textTheme.titleMedium),
-          const Padding(padding: EdgeInsets.all(8)),
-          if (widget.extra != null)
-            Text('Extra: ${widget.extra!}',
-                style: Theme.of(context).textTheme.titleMedium),
-          if (!widget.withScaffold) ...<Widget>[
-            const Padding(padding: EdgeInsets.all(16)),
-            TextButton(
-              onPressed: () {
-                GoRouter.of(context).pop();
+        children: [
+          Expanded(
+            // 聊天消息列表
+            child: ListView.separated(
+              itemBuilder: (context, index) {
+                return MessageItem(message: messages[index]);
               },
-              child: const Text('< Back',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              itemCount: messages.length, // 消息数量
+              separatorBuilder: (context, index) => const Divider(
+                // 分割线
+                height: 16,
+              ),
             ),
-          ]
+          ),
+          // 输入框
+          TextField(
+            controller: _textController,
+            decoration: InputDecoration(
+                hintText: 'Type a message', // 显示在输入框内的提示文字
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    // 这里处理发送事件
+                    if (_textController.text.isNotEmpty) {
+                      _sendMessage(_textController.text);
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.send,
+                  ),
+                )),
+          ),
         ],
       ),
     );
+  }
+
+  void _sendMessage(String text) {
+    final message = MessageModel(
+        uId: 2, content: text, isUser: true, timestamp: DateTime.now());
+    messages.add(message);
+    _textController.clear();
   }
 }

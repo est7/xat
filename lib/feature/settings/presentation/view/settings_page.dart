@@ -46,7 +46,7 @@ class SettingsPage extends ConsumerWidget {
               title: S.of(context).chat_setting,
               position: Position.single,
               description: S.of(context).chat_setting_desc,
-              onClick: () => GoRouter.of(context).go('/prompt/prompt_detail')),
+              onClick: () => GoRouter.of(context).go('/login/loginDetail')),
           SettingCustomItem(
               title: S.of(context).theme_and_language,
               position: Position.single,

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:xat/feature/auth/presentation/view/login_detail_page.dart';
 import 'package:xat/widgets/scaffold_with_nav_bar.dart';
 
+import '../feature/auth/presentation/view/login_page.dart';
 import 'chat_route.dart';
 import 'prompt_route.dart';
 import 'setting_route.dart';
@@ -22,6 +24,7 @@ final GoRouter router = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/chat',
   routes: <RouteBase>[
+    AuthRoute(),
     StatefulShellRoute.indexedStack(
       builder: (BuildContext context, GoRouterState state,
           StatefulNavigationShell navigationShell) {
@@ -50,3 +53,22 @@ final GoRouter router = GoRouter(
     ),
   ],
 );
+
+GoRoute AuthRoute() {
+  return GoRoute(
+    path: '/login',
+    builder: (BuildContext context, GoRouterState state) {
+      return const LoginPage(label: 'login', detailsPath: '/login/loginDetail');
+    },
+    routes: <RouteBase>[
+      GoRoute(
+        path: 'loginDetail',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginDetailPage(
+            label: 'loginDetail',
+          );
+        },
+      ),
+    ],
+  );
+}
