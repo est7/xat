@@ -13,8 +13,6 @@ abstract class ChatState with _$ChatState {
 
   const factory ChatState.loaded(List<ChatModel> chatList) = ChatsLoaded;
 
-  const factory ChatState.add(ChatModel model) = ChatsAdded;
-
   const factory ChatState.loadedWithError(String message) =
       ChatsLoadedWithError;
 }

@@ -18,6 +18,9 @@ class ChatRepositoryImpl extends _$ChatRepositoryImpl
   @override
   Stream<List<ChatModel>> build() {
     Stream<List<ChatEntity>> allChatList = chatListDao.getAllChatListStream();
+    allChatList.listen((event) {
+      print(event);
+    });
     return allChatList.map(ChatMapper.transformToModelList);
   }
 

@@ -25,7 +25,6 @@ class ChatPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chatViewModel = ref.read(chatViewModelProvider.notifier);
     useEffect(() {
       // chatViewModel.getChatSectionList();
       // 下面这行返回一个 cleanup 函数，当组件卸载时会执行这个函数。
@@ -114,7 +113,7 @@ class ChatPage extends HookConsumerWidget {
   _buildBody(WidgetRef ref, BuildContext context) {
     final data = ref.watch(chatViewModelProvider);
     return data.when(
-      initial: () => const Center(child: CircularProgressIndicator()),
+      initial: () => const Center(child: Text('initial')),
       loading: () => const Center(child: CircularProgressIndicator()),
       loaded: (chatList) {
         return RefreshIndicator(
@@ -124,7 +123,6 @@ class ChatPage extends HookConsumerWidget {
             child: _buildList(chatList));
       },
       loadedWithError: (message) => Center(child: Text(message.toString())),
-      add: (ChatModel model) {},
     );
   }
 

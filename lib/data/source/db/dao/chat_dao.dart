@@ -15,6 +15,7 @@ class ChatDao extends DatabaseAccessor<GlobalDatabase> with _$ChatDaoMixin {
   ChatDao(super.attachedDatabase);
 
   Stream<List<chat>> getAllChatListStream() => select(chatsTable).watch();
+
   Future<List<chat>> getAllChatList() => select(chatsTable).get();
 
   Future<int> insertChatItem(ChatsTableCompanion chat) async {
